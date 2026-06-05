@@ -31,7 +31,7 @@
             </nav>
         </div>
 
-        <div class="mt-8 border-t border-gray-800 pt-8 text-sm text-center">
+        <div class="mt-8 border-t border-gray-700 pt-8 text-sm text-center">
             <a href="/" class="group inline-flex items-center hover:text-gray-700 focus:rounded-sm focus:outline-2 focus:outline-indigo-500 dark:hover:text-white">
                 Made with
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="mx-1 -mt-px h-5 w-5 stroke-gray-400 group-hover:fill-red-500 group-hover:stroke-red-600 dark:stroke-gray-600 dark:group-hover:fill-red-700 dark:group-hover:stroke-red-800">
@@ -72,7 +72,6 @@
     .group:hover .group-hover\:stroke-red-600 { stroke: #dc2626; }
 
     .dark .dark\:border-gray-700 { border-color: #374151; }
-    .dark .dark\:border-gray-800 { border-color: #1f2937; }
     .dark .dark\:text-white { color: #ffffff; }
     .dark .dark\:text-gray-400 { color: #9ca3af; }
     .dark .dark\:stroke-gray-600 { stroke: #4b5563; }

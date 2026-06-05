@@ -249,6 +249,10 @@ body:has(.clonio-home) {
 .clonio-home .clonio-command-panel pre {
   margin: 0;
   white-space: pre-wrap;
+  /* Override Pergament's global `pre,code { background:#f3f3f3 }` so the dark
+     terminal container shows through in light mode (otherwise the light pre
+     background made the light console text unreadable). */
+  background: transparent;
   color: #d8fbff;
   font: 700 0.86rem/1.85 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 }
