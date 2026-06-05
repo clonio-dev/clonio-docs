@@ -12,6 +12,9 @@
             "app/helpers.php"
         ]
     },
+    "scripts": {
+        "build": "vendor/bin/pergament generate-static public --content-path=content --base-url=\"https://clonio-dev.github.io\" --prefix=\"/clonio-docs\" --clean"
+    },
     "config": {
         "allow-plugins": {
             "pestphp/pest-plugin": true,
