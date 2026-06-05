@@ -67,8 +67,8 @@ return [
     */
 
     'homepage' => [
-        'type' => 'doc-page',
-        'source' => 'getting-started/introduction',
+        'type' => 'page',
+        'source' => 'home',
     ],
 
     /*
@@ -131,7 +131,7 @@ return [
     */
 
     'pages' => [
-        'enabled' => false,
+        'enabled' => true,
         'path' => 'pages',
         'tts' => false,
         'statistics' => [
