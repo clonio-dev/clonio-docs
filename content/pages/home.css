@@ -24,7 +24,6 @@ body:has(.clonio-home) {
     radial-gradient(circle at 50% 92%, rgba(16, 185, 129, 0.16), transparent 28rem),
     linear-gradient(180deg, #050816 0%, #06111f 52%, #030712 100%);
   border: 1px solid rgba(148, 210, 255, 0.12);
-  border-radius: 2rem;
   margin: -1.5rem auto 0;
   overflow: hidden;
   position: relative;
@@ -530,6 +529,118 @@ body:has(.clonio-home) {
   to {
     stroke-dashoffset: -36;
   }
+}
+
+/* ==========================================================================
+   Light mode (Pergament toggles `.dark` on <html>; light = :not(.dark))
+   The page surfaces and text flip to a light palette while the "device"
+   elements (terminal, command panel, audit card, pipeline nodes) stay dark
+   on purpose — a CLI is dark even on a light site, and keeping them dark
+   avoids low-contrast text inside them.
+   All text/accent colours below meet WCAG AA (>= 4.5:1) on their background
+   and carry meaning via glyphs/shape, not colour alone (colour-blind safe).
+   ========================================================================== */
+html:not(.dark) body:has(.clonio-home) {
+  background: #eef2f7;
+}
+
+html:not(.dark) .clonio-home {
+  /* slate-900 text ~16:1, slate-600 muted ~7:1 on white */
+  --clonio-text: #0f172a;
+  --clonio-muted: #475569;
+  --clonio-border: rgba(15, 23, 42, 0.12);
+  background:
+    radial-gradient(circle at 12% 8%, rgba(8, 145, 178, 0.10), transparent 28rem),
+    radial-gradient(circle at 85% 18%, rgba(37, 99, 235, 0.10), transparent 30rem),
+    radial-gradient(circle at 50% 92%, rgba(5, 150, 105, 0.08), transparent 28rem),
+    linear-gradient(180deg, #ffffff 0%, #f6f9fc 52%, #eef3f8 100%);
+  border-color: rgba(15, 23, 42, 0.08);
+  box-shadow: 0 1.5rem 3.5rem rgba(15, 23, 42, 0.10);
+}
+
+html:not(.dark) .clonio-home::before {
+  background-image:
+      linear-gradient(rgba(15, 23, 42, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+}
+
+/* Wordmark: darker cyan -> emerald so the gradient text stays >= 4.5:1 */
+html:not(.dark) .clonio-home .clonio-brand-name {
+  background: linear-gradient(135deg, #0e7490, #047857);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+html:not(.dark) .clonio-home .clonio-brand-mark {
+  filter: drop-shadow(0 0.3rem 0.7rem rgba(15, 23, 42, 0.18));
+}
+
+/* cyan-700 text ~4.8:1 on the tinted pill */
+html:not(.dark) .clonio-home .clonio-eyebrow {
+  border-color: rgba(8, 145, 178, 0.4);
+  background: rgba(8, 145, 178, 0.08);
+  color: #0e7490;
+  box-shadow: 0 0.5rem 1.5rem rgba(8, 145, 178, 0.12);
+}
+
+html:not(.dark) .clonio-home .clonio-hero h1,
+html:not(.dark) .clonio-home .clonio-section h2,
+html:not(.dark) .clonio-home .clonio-cta h2,
+html:not(.dark) .clonio-home .clonio-card h3 {
+  color: #0f172a;
+}
+
+html:not(.dark) .clonio-home .clonio-lede {
+  color: #334155;
+}
+
+/* Secondary button: white surface, slate-900 text (~16:1) */
+html:not(.dark) .clonio-home .clonio-button-secondary {
+  border-color: rgba(15, 23, 42, 0.18);
+  background: #ffffff;
+  color: #0f172a;
+}
+
+/* emerald-700 ~4.9:1 on white (was emerald-400, only ~1.6:1) */
+html:not(.dark) .clonio-home .clonio-section-kicker {
+  color: #047857;
+}
+
+html:not(.dark) .clonio-home .clonio-signal-strip {
+  border-color: rgba(15, 23, 42, 0.1);
+  background: rgba(15, 23, 42, 0.08);
+}
+
+html:not(.dark) .clonio-home .clonio-signal-strip span {
+  background: #ffffff;
+  color: #0f172a;
+}
+
+html:not(.dark) .clonio-home .clonio-card {
+  border-color: rgba(15, 23, 42, 0.1);
+  background:
+      linear-gradient(180deg, #ffffff, #f7fafc),
+      radial-gradient(circle at 18% 0%, rgba(8, 145, 178, 0.08), transparent 14rem);
+}
+
+html:not(.dark) .clonio-home .clonio-card::after {
+  color: rgba(15, 23, 42, 0.1);
+}
+
+html:not(.dark) .clonio-home .clonio-workflow-note {
+  border-color: rgba(5, 150, 105, 0.3);
+  background: linear-gradient(145deg, rgba(5, 150, 105, 0.1), rgba(255, 255, 255, 0.9));
+}
+
+html:not(.dark) .clonio-home .clonio-workflow-note strong {
+  color: #065f46;
+}
+
+html:not(.dark) .clonio-home .clonio-cta-card {
+  border-color: rgba(8, 145, 178, 0.28);
+  background:
+      radial-gradient(circle at 85% 20%, rgba(5, 150, 105, 0.12), transparent 12rem),
+      #ffffff;
 }
 
 @media (max-width: 760px) {
