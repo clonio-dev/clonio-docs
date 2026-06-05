@@ -29,15 +29,16 @@ jobs:
 
       - name: Generate static site
         run: |
-          REPOSITORY_NAME="${GITHUB_REPOSITORY#*/}"
           vendor/bin/pergament generate-static public \
             --content-path=content \
-            --base-url="https://${{ github.repository_owner }}.github.io" \
-            --prefix="/${REPOSITORY_NAME}" \
+            --base-url="https://clonio.dev" \
             --clean
         env:
           APP_NAME: Clonio Docs
-          APP_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+          APP_URL: https://clonio.dev
+
+      - name: Write CNAME for custom domain
+        run: echo "clonio.dev" > public/CNAME
 
       - uses: actions/upload-pages-artifact@v3
         with:
