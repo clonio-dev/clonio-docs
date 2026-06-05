@@ -1,86 +1,56 @@
 ---
 title: Supported Databases
-excerpt: Database engines supported by Clonio, their versions, and specific considerations for each.
+excerpt: Database drivers and connection notes for Clonio CLI.
 ---
 
 # Supported Databases
 
-Clonio supports four database engines as both source and target connections. Cross-engine cloning is supported — for example, cloning from MySQL to PostgreSQL.
+Clonio CLI supports the following connection drivers:
 
-## MySQL
+| Driver | Typical use |
+|---|---|
+| `mysql` | MySQL source or target databases |
+| `mariadb` | MariaDB source or target databases |
+| `pgsql` | PostgreSQL source or target databases |
+| `sqlsrv` | Microsoft SQL Server source or target databases |
+| `sqlite` | Local SQLite databases and lightweight test fixtures |
 
-- **Supported versions:** 8.0+
-- **Default port:** 3306
-- **Also covers:** MariaDB 10.4+
+## Source and target
 
-MySQL is the most commonly used database with Clonio. Full support for all features including schema inspection, foreign key handling, column comments, charset/collation detection, and unsigned integer types.
+The `.cloning.yaml` file names the source connection:
 
-### MySQL-Specific Notes
+```yaml
+version: "1"
+connection: production
+```
 
-- Auto-increment columns are detected and preserved during schema replication
-- `UNSIGNED` integer types are recognized and mapped correctly
-- Character set and collation are inspected at both table and column level
-- Clonio temporarily disables foreign key checks during data transfer (`SET FOREIGN_KEY_CHECKS = 0`) and re-enables them after each table completes
+The target is selected at runtime:
 
-## MariaDB
+```bash
+clonio cloning:run production.cloning.yaml --target local-dev
+```
 
-- **Supported versions:** 10.4+
-- **Default port:** 3306
+## Docker networking
 
-MariaDB is treated as MySQL-compatible. The same schema inspector and schema builder are used. Clonio detects the MariaDB version string and handles any known differences automatically.
+When running Clonio in Docker, `localhost` points to the container, not the host. Clonio detects container execution and rewrites loopback hostnames to `host.docker.internal` in memory.
 
-## PostgreSQL
+On Linux, add the gateway host explicitly or use host networking:
 
-- **Supported versions:** 14+
-- **Default port:** 5432
+```bash
+docker run --rm \
+  --add-host=host.docker.internal:host-gateway \
+  -v "$(pwd)":/workspace \
+  ghcr.io/clonio-dev/clonio:latest connection:test production
+```
 
-PostgreSQL support includes full schema inspection, sequence handling, and cross-schema awareness.
+## Database grants
 
-### PostgreSQL-Specific Notes
+The database user needs enough permissions for the operation you configure:
 
-- `SERIAL` / `BIGSERIAL` columns are detected as auto-increment equivalents
-- PostgreSQL does not have `UNSIGNED` integer types; this attribute is ignored during cross-engine cloning to PostgreSQL
-- Sequences are handled during schema replication
-- Foreign key constraints are temporarily deferred during data transfer
+- read source schema and rows
+- create missing target tables
+- add missing target columns when `enforce_column_types` is enabled
+- delete or truncate target rows when `rows.clear` is configured
+- drop target columns or tables only when destructive schema options are enabled
 
-## SQL Server
-
-- **Supported versions:** SQL Server 2019+
-- **Default port:** 1433
-
-SQL Server (Microsoft) is supported with full schema inspection and replication capabilities.
-
-### SQL Server-Specific Notes
-
-- `IDENTITY` columns are detected as auto-increment equivalents
-- `IDENTITY_INSERT` is temporarily enabled during data transfer for identity columns
-- Column comments are stored via extended properties and are inspected accordingly
-- Schema-qualified table names are supported
-
-## Feature Matrix
-
-| Feature | MySQL | PostgreSQL | SQL Server |
-|---------|-------|------------|------------|
-| Schema inspection | Yes | Yes | Yes |
-| Foreign keys | Yes | Yes | Yes |
-| Indexes | Yes | Yes | Yes |
-| Auto-increment | Yes | Yes (SERIAL) | Yes (IDENTITY) |
-| Column comments | Yes | Yes | Yes |
-| Default values | Yes | Yes | Yes |
-| Unsigned types | Yes | N/A | N/A |
-| Charset/Collation | Yes | Yes | Yes |
-| CHECK constraints | Yes | Yes | Yes |
-
-## Cross-Engine Cloning
-
-Clonio can clone data between different database engines. During schema replication, data types are automatically mapped to the closest equivalent on the target engine. For example:
-
-- MySQL `TINYINT` maps to PostgreSQL `SMALLINT`
-- MySQL `DATETIME` maps to PostgreSQL `TIMESTAMP`
-- PostgreSQL `TEXT` maps to MySQL `LONGTEXT`
-
-Type mapping is handled transparently. If a type cannot be mapped exactly, Clonio uses the closest compatible type and logs a notice.
-
-## Next Steps
-
-With your connections configured, proceed to [Creating a Cloning](/docs/2-clonings/01-creating-a-cloning) to set up your first data transfer.
+Use the least privilege that still allows your chosen workflow.

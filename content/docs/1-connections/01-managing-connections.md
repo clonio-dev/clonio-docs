@@ -1,86 +1,87 @@
 ---
 title: Managing Connections
-excerpt: Add, test, and manage database connections that serve as sources and targets for cloning operations.
+excerpt: Add, test, update, list, and delete database connections for Clonio CLI.
 ---
 
 # Managing Connections
 
-Before you can create a cloning, you need at least two database connections: a **source** (where data comes from, typically production) and a **target** (where anonymized data goes, typically test or staging).
+Clonio stores database connections in `clonio.json` in the current working directory. Passwords and other secrets are encrypted with `APP_KEY` from your environment or `.env` file.
 
-## Connection Overview
+Run commands from the project directory that owns the cloning configuration.
 
-Navigate to **Data Sources** in the sidebar to see all configured connections. Each connection card displays:
+## Initialize encryption
 
-- Connection name and database type (MySQL, PostgreSQL, etc.)
-- Host and port
-- Database name
-- Username
-- Health status with last check timestamp
-- Source badge for all production databases
+```bash
+clonio init
+```
 
-![Connection Management](connections.png)
+This ensures `APP_KEY` exists. If `.gitignore` already exists, Clonio adds `.env` and `clonio.json` when missing.
 
-From this page you can:
+## Add a connection
 
-- **Test all** connections at once using the "Test all" button
-- **Add Connection** to create a new connection
-- **Refresh** individual connections using the refresh icon
-- **Delete** connections using the trash icon
+```bash
+clonio connection:add production --production
+```
 
-## Adding a Connection
+Without flags, Clonio prompts for:
 
-Click **+ Add Connection** to open the connection form.
+- connection name
+- driver: `mysql`, `mariadb`, `pgsql`, `sqlsrv`, or `sqlite`
+- host and port
+- database name or SQLite path
+- PostgreSQL schema when relevant
+- username and password
+- whether this is a production connection
 
-![New Connection Form](connection-create.png)
+Non-interactive example:
 
-Fill in the following fields:
+```bash
+clonio connection:add production \
+  --type=pgsql \
+  --host=db.internal \
+  --port=5432 \
+  --database=app \
+  --schema=public \
+  --username=clonio \
+  --password="$DB_PASSWORD" \
+  --production
+```
 
-| Field | Description |
-|-------|-------------|
-| **Connection Name** | A descriptive label (e.g., "Production MySQL", "Staging DB") |
-| **Database Type** | MySQL, MariaDB, PostgreSQL, or SQL Server |
-| **Environment** | Optional flag to mark the connection as Production |
-| **Host** | The database server hostname or IP address |
-| **Port** | The database server port (default varies by type) |
-| **Database Name** | The name of the database to connect to |
-| **Username** | Database user with read access (source) or read/write access (target) |
-| **Password** | Database user password |
+## List connections
 
-### Security
+```bash
+clonio connection:list
+```
 
-All database credentials are encrypted at rest using AES-256. Passwords and secret keys are never displayed in the interface after initial configuration.
+Use this to confirm the names you will reference from `.cloning.yaml` and `--target`.
 
-## Testing Connections
+## Test a connection
 
-After creating a connection, Clonio automatically tests connectivity and displays the health status:
+```bash
+clonio connection:test production
+```
 
-- **Healthy** (green) -- Connection successful, database is reachable
-- **Unhealthy** (red) -- Connection failed, check credentials or network
+Test both source and target before running `cloning:dump` or `cloning:run`.
 
-You can re-test a single connection by clicking the refresh icon on its card, or test all connections at once with the "Test all" button.
+## Update a connection
 
-## Required Permissions
+```bash
+clonio connection:update production
+```
 
-### Source Connection (Read)
+Secrets display as masked values. Press Enter to keep an existing secret or enter a new value to replace it.
 
-The source database user needs:
+## Delete a connection
 
-- `SELECT` on all tables to be cloned
-- `SHOW DATABASES` / access to information schema for schema inspection
+```bash
+clonio connection:delete old-staging
+```
 
-### Target Connection (Read/Write)
+Deleting a connection removes it from `clonio.json`. It does not change committed `.cloning.yaml` files that reference the connection name.
 
-The target database user needs:
+## Security notes
 
-- `SELECT`, `INSERT`, `UPDATE`, `DELETE` on all tables
-- `CREATE`, `ALTER`, `DROP` for schema replication
-- `REFERENCES` for foreign key management
-
-## Editing and Deleting
-
-Click on a connection card to edit its details. To delete a connection, click the trash icon. A connection cannot be deleted if it is actively used in a cloning configuration.
-
-## Next Steps
-
-With connections configured, learn about the [Supported Databases](02-supported-databases.md) or jump ahead to [Creating a Cloning](../2-clonings/01-creating-a-cloning.md).
-With connections configured, learn about the [Supported Databases](02-supported-databases.md) or jump ahead to [Creating a Cloning](../2-clonings/01-creating-a-cloning.md).
+- Do not commit `.env`.
+- Do not commit `clonio.json`.
+- Store `APP_KEY` as a CI secret for pipeline usage.
+- Regenerating `APP_KEY` with `clonio init --force` makes existing encrypted passwords unreadable.
