@@ -40,7 +40,7 @@ jobs:
       - name: Write CNAME for custom domain
         run: echo "clonio.dev" > public/CNAME
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: public
 
