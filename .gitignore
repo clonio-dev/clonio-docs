@@ -1,0 +1,6 @@
+/.idea/
+/vendor/
+/public/
+/storage/
+/node_modules/
+.DS_Store

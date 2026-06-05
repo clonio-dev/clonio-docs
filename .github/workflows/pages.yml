@@ -1,0 +1,55 @@
+name: Deploy Pergament site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+
+      - run: composer install --no-dev --prefer-dist --no-interaction
+
+      - name: Generate static site
+        run: |
+          REPOSITORY_NAME="${GITHUB_REPOSITORY#*/}"
+          vendor/bin/pergament generate-static public \
+            --content-path=content \
+            --base-url="https://${{ github.repository_owner }}.github.io" \
+            --prefix="/${REPOSITORY_NAME}" \
+            --clean
+        env:
+          APP_NAME: Clonio Docs
+          APP_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

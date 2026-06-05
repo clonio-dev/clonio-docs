@@ -1,0 +1,24 @@
+{
+    "name": "clonio-dev/clonio-docs",
+    "description": "Static Clonio documentation site generated with Laravel Pergament.",
+    "type": "project",
+    "require": {
+        "php": "^8.5",
+        "rokde/laravel-pergament": "^1.2",
+        "vlucas/phpdotenv": "^5.6"
+    },
+    "autoload": {
+        "files": [
+            "app/helpers.php"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
+        },
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
