@@ -23,6 +23,7 @@ if (! function_exists('config')) {
         $config = app('config');
 
         static $projectPergamentConfigLoaded = false;
+        static $projectViewOverridesRegistered = false;
 
         if (! $projectPergamentConfigLoaded && method_exists(app(), 'configPath')) {
             $projectConfigPath = app()->configPath('pergament.php');
@@ -32,6 +33,35 @@ if (! function_exists('config')) {
             }
 
             $projectPergamentConfigLoaded = true;
+        }
+
+        // Let the project override Pergament's published Blade views/components.
+        // The standalone generator only registers the package view paths, so we
+        // prepend resources/views/vendor/pergament so app copies win (e.g. footer).
+        // The view binding may not exist on the very first config() call, so retry
+        // until it does instead of giving up after the config one-shot above.
+        if (! $projectViewOverridesRegistered && method_exists(app(), 'resourcePath')) {
+            $container = Container::getInstance();
+
+            if ($container->bound('view')) {
+                $factory = $container->make('view');
+
+                $componentOverrides = app()->resourcePath('views/vendor/pergament/components');
+
+                if (is_dir($componentOverrides)) {
+                    // Anonymous components (x-pergament::*) resolve via a namespace
+                    // keyed by the hash of their prefix.
+                    $factory->prependNamespace(hash('xxh128', 'pergament'), $componentOverrides);
+                }
+
+                $viewOverrides = app()->resourcePath('views/vendor/pergament');
+
+                if (is_dir($viewOverrides)) {
+                    $factory->prependNamespace('pergament', $viewOverrides);
+                }
+
+                $projectViewOverridesRegistered = true;
+            }
         }
 
         if ($key === null) {

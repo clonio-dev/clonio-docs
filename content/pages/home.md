@@ -10,6 +10,22 @@ seo.description: "MIT-licensed CLI for safe, anonymized database cloning inside 
 <main class="clonio-home">
   <section class="clonio-hero" aria-labelledby="clonio-hero-title">
     <div class="clonio-hero-copy">
+      <a class="clonio-brand" href="/" aria-label="Clonio home">
+        <svg class="clonio-brand-mark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 144 144" aria-hidden="true">
+          <defs>
+            <linearGradient id="clonio-logo-hero" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0" stop-color="#6EE7B7" />
+              <stop offset="1" stop-color="#3B82F6" />
+            </linearGradient>
+          </defs>
+          <g transform="matrix(.43 0 0 .43 -38.1 -60.17)">
+            <path fill="url(#clonio-logo-hero)" d="M160 250a96 96 0 1 1 192 0v170q0 70-96 20t-96-140Z" />
+            <ellipse cx="215" cy="260" fill="#1e3a8a" rx="18" ry="28" />
+            <ellipse cx="297" cy="260" fill="#1e3a8a" rx="18" ry="28" />
+          </g>
+        </svg>
+        <span class="clonio-brand-name">Clonio</span>
+      </a>
       <p class="clonio-eyebrow">MIT-licensed CLI - privacy-first database cloning</p>
       <h1 id="clonio-hero-title">Test with real data. Without the GDPR nightmare.</h1>
       <p class="clonio-lede">Clonio CLI clones production-like database data into development, test, staging, and CI while applying anonymization, schema sync, key remapping, and signed audit logs.</p>

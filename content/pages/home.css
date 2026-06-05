@@ -71,6 +71,36 @@ body:has(.clonio-home) {
   padding-block: 5.5rem 3rem;
 }
 
+.clonio-home .clonio-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0 0 1.6rem;
+  text-decoration: none;
+  width: fit-content;
+}
+
+.clonio-home .clonio-brand-mark {
+  width: 2.6rem;
+  height: 2.6rem;
+  filter: drop-shadow(0 0 1.2rem rgba(34, 211, 238, 0.45));
+  transition: transform 200ms ease;
+}
+
+.clonio-home .clonio-brand:hover .clonio-brand-mark {
+  transform: translateY(-2px) rotate(-4deg);
+}
+
+.clonio-home .clonio-brand-name {
+  color: #f7fdff;
+  font: 800 1.55rem/1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--clonio-cyan), var(--clonio-green));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .clonio-home .clonio-eyebrow {
   display: inline-flex;
   align-items: center;
