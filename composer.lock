@@ -3032,16 +3032,16 @@
         },
         {
             "name": "rokde/laravel-pergament",
-            "version": "v1.4.1",
+            "version": "v1.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rokde/laravel-pergament.git",
-                "reference": "be51dac86b5a756b83773749df4d6a86c4bffca6"
+                "reference": "542f9487cdca527e697af4d823633568261974c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rokde/laravel-pergament/zipball/be51dac86b5a756b83773749df4d6a86c4bffca6",
-                "reference": "be51dac86b5a756b83773749df4d6a86c4bffca6",
+                "url": "https://api.github.com/repos/rokde/laravel-pergament/zipball/542f9487cdca527e697af4d823633568261974c0",
+                "reference": "542f9487cdca527e697af4d823633568261974c0",
                 "shasum": ""
             },
             "require": {
@@ -3098,7 +3098,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rokde/laravel-pergament/issues",
-                "source": "https://github.com/rokde/laravel-pergament/tree/v1.4.1"
+                "source": "https://github.com/rokde/laravel-pergament/tree/v1.4.3"
             },
             "funding": [
                 {
@@ -3110,7 +3110,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2026-06-03T18:32:45+00:00"
+            "time": "2026-06-05T12:58:07+00:00"
         },
         {
             "name": "symfony/clock",
