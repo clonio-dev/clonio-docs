@@ -1,51 +1,51 @@
 ---
 title: Introduction
-excerpt: Learn what Clonio is, why it exists, and how it helps teams safely clone production databases.
+excerpt: Learn what Clonio CLI is, why it exists, and how it helps teams clone database data safely from the terminal.
 ---
 
 # Introduction
 
-Clonio is a database cloning tool that creates safe, anonymized copies of production databases for development, testing, and staging environments. It provides a web-based interface for configuring connections, defining anonymization rules, scheduling cloning runs, and monitoring execution in real time. For data protection auditors there is a signed audit log to prove the transferred data settings and log entries.
+Clonio CLI is a command-line tool for cloning production-like database data into development, test, staging, and CI environments. It reads from a source database, applies the transformation rules in a `.cloning.yaml` file, synchronizes the target schema where configured, and writes anonymized data to the target.
 
-![Clonio Dashboard](dashboard.png)
+There is no web application to operate. Clonio is designed for terminal-first workflows: local scripts, Docker, Composer, cron jobs, GitHub Actions, GitLab CI, and other pipeline runners.
 
-## The Problem
+## What Clonio CLI solves
 
-Development teams need production-like data to build and test effectively, but production databases contain personally identifiable information (PII) that cannot be used outside of production. Manually copying and sanitizing data is error-prone, time-consuming, and difficult to audit.
+Teams need realistic data to test migrations, QA flows, search, reports, billing logic, imports, exports, and edge cases. Raw production copies are risky because they can expose personal data in environments with weaker access controls.
 
-Regulations like the GDPR require that personal data is handled with care. A single oversight - an unmasked email address, a real phone number in a test environment - can lead to compliance violations and fines.
+Manual sanitization scripts are hard to maintain, hard to audit, and easy to forget. Clonio turns that process into a reviewed configuration file and a repeatable command.
 
-## What Clonio Does
+## Core capabilities
 
-Clonio sits between your production database and your non-production environments. It reads from the source, applies transformation rules you define, and writes the anonymized data to the target.
+- **Connection management** - store source and target database connections in a local `clonio.json` file with encrypted passwords.
+- **PII-aware config generation** - inspect a source database and generate a `.cloning.yaml` with suggested transformations.
+- **Column transformations** - use `fake`, `hash`, `mask`, `null`, `static`, or `keep` strategies per column.
+- **Row selection** - transfer full tables or only the first/last N rows.
+- **Schema synchronization** - create missing tables and optionally add or remove columns/tables on the target.
+- **Key remapping** - replace primary keys and rewrite foreign keys consistently.
+- **Signed audit logs** - keep tamper-evident evidence of what was run and which configuration was applied.
+- **CI-friendly execution** - use `--ci`, exit codes, Docker, or Composer in pipelines.
 
-![Clonio Cloning Flow](cloning-flow.svg)
+## License and funding
 
-> [!WARNING]
-> You are responsible to define the anonymizing function for the fields that contain such data.
+Clonio CLI is currently MIT licensed. Everyone can use it without usage restrictions, including commercial users.
 
+There is no pricing plan for the CLI. If Clonio is useful to you or your organization, sponsorships and donations are welcome through [GitHub Sponsors](https://github.com/sponsors/clonio-dev). Sponsorship helps fund ongoing maintenance, new database drivers, better anonymization strategies, and documentation.
 
-**Core capabilities:**
+Feature requests should be submitted in the [clonio-cli issue tracker](https://github.com/clonio-dev/clonio-cli/issues/new/choose) using the **Feature Request** template.
 
-- **Multi-database support** — Connects to MySQL, MariaDB, PostgreSQL, and SQL Server as both source and target. Cross-database cloning (e.g., MySQL to PostgreSQL) is supported.
-- **Data anonymization** — Replace sensitive columns with fake data (names, emails, phone numbers), hash values, mask content, or set to null. Transformations are configured per column, per table.
-- **Row selection** — Copy full tables, only the first X rows, or only the last X rows. Useful for reducing dataset size in test environments while keeping recent data.
-- **Foreign key awareness** — When a parent table uses row selection, child tables are automatically filtered to preserve referential integrity.
-- **Schema replication** — Clonio reads the source schema and ensures the target schema matches before transferring data. New columns or tables are created automatically.
-- **Scheduling and triggers** — Run clonings manually, on a cron schedule, or via an API trigger URL that integrates with CI/CD pipelines.
-- **Webhook notifications** — Get notified via HTTP webhooks when a cloning run succeeds or fails.
-- **Audit trail** — Every cloning run generates a cryptographically signed audit report documenting the configuration, execution log, and GDPR compliance status. Audit reports can be printed or shared via public links.
-- **Real-time execution console** — Monitor cloning progress live with a timestamped log showing each step as it happens.
+## Typical workflow
 
-## How It Works
+```bash
+clonio init
+clonio connection:add production --production
+clonio connection:add local-dev
+clonio cloning:dump --connection production
+clonio cloning:run production.cloning.yaml --target local-dev
+```
 
-A typical workflow follows these steps:
+## Next steps
 
-1. **Configure connections** — Add your source (production) and target (test/staging) database connections.
-2. **Create a cloning** — Use the step-by-step wizard to name the cloning, select source and target, configure table transformations, set a schedule, and define triggers.
-3. **Run the cloning** — Execute manually, wait for the schedule, or trigger via API. Clonio replicates the schema, transfers data in chunks, applies anonymization rules, and maintains foreign key integrity.
-4. **Monitor and audit** — Watch progress in real time. After completion, review the audit trail report for compliance documentation.
-
-## Next Steps
-
-Head to the [Installation](02-installation.md) guide to set up Clonio and run your first clone.
+- [Installation](02-installation.md)
+- [First clone](03-first-clone.md)
+- [Managing connections](../1-connections/01-managing-connections.md)
