@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b5bf173f8fc046771c948c27183514b8",
+    "content-hash": "99925acc02660f64bdabd0dca37ae4d9",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -3032,16 +3032,16 @@
         },
         {
             "name": "rokde/laravel-pergament",
-            "version": "v1.4.4",
+            "version": "v1.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rokde/laravel-pergament.git",
-                "reference": "9255720b6c6390dbdb56b5d51ec2eeea30cff576"
+                "reference": "a8535527fbd150c6bb64bf148ec54bdef2aaf40e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rokde/laravel-pergament/zipball/9255720b6c6390dbdb56b5d51ec2eeea30cff576",
-                "reference": "9255720b6c6390dbdb56b5d51ec2eeea30cff576",
+                "url": "https://api.github.com/repos/rokde/laravel-pergament/zipball/a8535527fbd150c6bb64bf148ec54bdef2aaf40e",
+                "reference": "a8535527fbd150c6bb64bf148ec54bdef2aaf40e",
                 "shasum": ""
             },
             "require": {
@@ -3098,7 +3098,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rokde/laravel-pergament/issues",
-                "source": "https://github.com/rokde/laravel-pergament/tree/v1.4.4"
+                "source": "https://github.com/rokde/laravel-pergament/tree/v1.4.5"
             },
             "funding": [
                 {
@@ -3110,7 +3110,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2026-06-05T16:12:03+00:00"
+            "time": "2026-06-15T16:38:46+00:00"
         },
         {
             "name": "symfony/clock",
