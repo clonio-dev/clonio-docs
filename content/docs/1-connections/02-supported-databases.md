@@ -14,6 +14,7 @@ Clonio CLI supports the following connection drivers:
 | `pgsql` | PostgreSQL source or target databases |
 | `sqlsrv` | Microsoft SQL Server source or target databases |
 | `sqlite` | Local SQLite databases and lightweight test fixtures |
+| `dump` | Virtual target only — writes a SQL-file archive instead of a live database (see [SQL Dump Connections](03-sql-dump-connections.md)) |
 
 ## Source and target
 
@@ -29,6 +30,8 @@ The target is selected at runtime:
 ```bash
 clonio cloning:run production.cloning.yaml --target local-dev
 ```
+
+The target may be a live database or a `dump` connection that writes the anonymized result to a portable SQL-file archive. A `dump` connection can only be used as a target, never as a source.
 
 ## Docker networking
 

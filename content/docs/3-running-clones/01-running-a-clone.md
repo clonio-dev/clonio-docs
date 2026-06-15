@@ -22,7 +22,7 @@ clonio cloning:run production.cloning.yaml --target local-dev
 
 | Option | Description |
 |---|---|
-| `--target=<name>` | Target connection from `clonio.json`. |
+| `--target=<name>` | Target connection from `clonio.json`. May be a live database or a [dump](../1-connections/03-sql-dump-connections.md) connection that writes a SQL-file archive. |
 | `--dry-run` | Validate and inspect without transferring data. |
 | `--ci` | Suppress non-error output; `--target` is required. |
 | `--allow-failure` | Exit with `0` even if the run fails. |

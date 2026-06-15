@@ -17,7 +17,7 @@ excerpt: Compact overview of common Clonio CLI commands.
 
 | Command | Purpose |
 |---|---|
-| `clonio connection:add` | Add a database connection. |
+| `clonio connection:add` | Add a database or [dump](../1-connections/03-sql-dump-connections.md) connection. |
 | `clonio connection:list` | List configured connections. |
 | `clonio connection:test` | Test database connectivity. |
 | `clonio connection:update` | Update connection settings or secrets. |
