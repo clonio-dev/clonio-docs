@@ -31,7 +31,7 @@ Without flags, Clonio prompts for:
 - database name or SQLite path
 - PostgreSQL schema when relevant
 - username and password
-- transport security for network drivers: `require` (default), `verify`, `disable` or driver default, plus certificate paths when needed (see [Transport Security](04-transport-security.md))
+- transport security for network drivers: `require` (default, except SQL Server which defaults to `verify`), `verify`, `disable` or driver default, plus certificate paths when needed (see [Transport Security](04-transport-security.md))
 - whether this is a production connection
 
 Non-interactive example:
@@ -49,7 +49,7 @@ clonio connection:add production \
   --production
 ```
 
-New network connections use `--ssl-mode=require` when no mode is given. A server without TLS, such as the stock `postgres` Docker image, needs `--ssl-mode=disable`.
+New network connections use `--ssl-mode=require` when no mode is given, except SQL Server which uses `--ssl-mode=verify` (ODBC Driver 18 already verifies by default). A server without TLS, such as the stock `postgres` Docker image, needs `--ssl-mode=disable`.
 
 ## List connections
 

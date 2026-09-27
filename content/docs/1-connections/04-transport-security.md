@@ -22,6 +22,8 @@ There is no `prefer` mode. Clonio never silently falls back from TLS to plaintex
 
 `clonio connection:add` preselects `require`, and `--no-interaction` stores `require` unless you pass `--ssl-mode`. Servers that enforce TLS, such as MySQL with `require_secure_transport=ON` or managed cloud databases, work without further setup.
 
+SQL Server (`sqlsrv`) is the exception: it defaults to `verify` instead, because ODBC Driver 18 already verifies the server certificate by default — `require` would weaken it.
+
 Existing connections in `clonio.json` are not changed. They keep the driver default until you run `clonio connection:update` and pick a mode.
 
 A server without TLS rejects `require`. Use `disable` for it:
@@ -36,7 +38,7 @@ clonio connection:add local-pg --type=pgsql --host=127.0.0.1 --port=5432 \
 
 Interactively, `connection:add` asks for transport security right after the password:
 
-- `Require (encrypted, not verified)` (default)
+- `Require (encrypted, not verified)` (default, except SQL Server which defaults to `Verify`)
 - `Verify (encrypted + certificate check)`: then asks for the CA certificate path (not for SQL Server)
 - `Disable (plaintext)`
 - `Driver default`
@@ -99,12 +101,17 @@ SQL Server connections don't support client certificates.
 | `pgsql` | `sslmode=disable` | `sslmode=require` | `sslmode=verify-full` | System trust store | `sslmode=prefer`: TLS if the server offers it |
 | `sqlsrv` | `Encrypt=no` | `Encrypt=yes`, `TrustServerCertificate=yes` | `Encrypt=yes`, `TrustServerCertificate=no` | System trust store (always) | ODBC Driver 18: `Encrypt=yes`, certificate checked |
 
+### PostgreSQL
+
+- `verify` without a CA file (`sslrootcert=system`) uses the operating system's trust store. This needs libpq 16 or later; older libpq versions don't recognize `system` and fail to connect. Pass `--ssl-ca` with an explicit CA file to support older libpq.
+- Even under `require`, if `~/.postgresql/root.crt` exists on the machine running Clonio, libpq upgrades the connection to verify the server certificate against it. This is libpq's own behavior, independent of Clonio's `ssl.mode`.
+
 ### SQL Server
 
 - The ODBC driver takes no certificate paths. `verify` checks the server certificate against the operating system's trust store, so install your CA there.
 - ODBC Driver 18 encrypts and verifies by default. A server with a self-signed certificate (the default for SQL Server on Linux and in Docker) fails with the driver default and with `verify`. Use `require`.
 - A server configured with `forceencryption=1` encrypts the connection even with `disable`.
-- Older `clonio.json` files may contain `"trust_server_certificate": true`. It keeps working. `clonio connection:update` replaces it with `"ssl": { "mode": "require" }`. `--trust-server-certificate` is a deprecated alias for `--ssl-mode=require`.
+- Older `clonio.json` files may contain `"trust_server_certificate": true`. It keeps working. `clonio connection:update` replaces it with `"ssl": { "mode": "require" }`. `--trust-server-certificate` is a deprecated alias for `--ssl-mode=require`, available on `connection:add` only; `connection:update` has no flags and asks the same questions interactively (or keeps stored values with `--no-interaction`).
 
 ## Checking a connection
 

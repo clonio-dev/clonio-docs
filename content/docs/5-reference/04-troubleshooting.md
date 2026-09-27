@@ -49,7 +49,7 @@ The server only accepts encrypted connections, but the connection uses `disable`
 clonio connection:update staging
 ```
 
-With a MySQL user that requires a client certificate (`REQUIRE X509`), a plaintext connection instead fails with a generic `Access denied` error, indistinguishable from a wrong password, so no TLS hint is given; add `--ssl-cert`/`--ssl-key` if the account needs a client certificate.
+With a MySQL user that requires a client certificate (`REQUIRE X509`), a plaintext connection instead fails with a generic `Access denied` error, indistinguishable from a wrong password, so no TLS hint is given; run `clonio connection:update <name>` and add a client certificate if the account needs one.
 
 ## "TLS handshake failed. The server may not support TLS"
 
