@@ -39,6 +39,13 @@ In this example, `users.id` receives new random values. `orders.user_id` and `em
 
 Key remapping helps keep the relational graph intact while reducing the risk of correlating target records back to production identifiers.
 
+## Limitations
+
+**Polymorphic relations are not supported.** Key remapping only handles standard foreign keys (single `table` + `column`). If your schema uses Laravel's polymorphic relations (e.g., `commentable_type` + `commentable_id`), you must:
+
+- Disable foreign key checks with `disable_foreign_key_checks: true`, or
+- Manually handle type-based IDs after cloning
+
 ## Large databases
 
 For large mappings, use file-based mapping storage:
