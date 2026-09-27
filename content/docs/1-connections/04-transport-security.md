@@ -124,7 +124,7 @@ production: OK (38ms, tls: verify)
   TLS cipher: TLS_AES_256_GCM_SHA384
 ```
 
-`connection:list` shows each connection's mode in the `TLS` column. With `-v`, MySQL, MariaDB and PostgreSQL connections also report the negotiated cipher; if the `TLS cipher` line is missing, the connection is not encrypted. When a connection fails, the error comes with a hint; see [Troubleshooting](../5-reference/04-troubleshooting.md).
+`connection:list` shows each connection's mode in the `TLS` column. With `-v`, network connections also report the negotiated cipher; if the `TLS cipher` line is missing, the connection is not encrypted. SQL Server does not expose the cipher, so an encrypted SQL Server connection shows `TLS cipher: encrypted (cipher not reported by SQL Server)`. `connection:test` without a name shows the mode for every connection in a `TLS` column, and with `-v` the cipher in a `Cipher` column. When a connection fails, the error comes with a hint; see [Troubleshooting](../5-reference/04-troubleshooting.md).
 
 ## `clonio.json`
 

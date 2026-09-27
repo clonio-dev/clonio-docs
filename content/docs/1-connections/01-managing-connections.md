@@ -75,7 +75,27 @@ A successful test shows the transport security mode:
 production: OK (42ms, tls: require)
 ```
 
-Add `-v` to also see the negotiated TLS cipher (MySQL, MariaDB and PostgreSQL).
+Add `-v` to also see the negotiated TLS cipher. SQL Server does not report the cipher, so it shows `encrypted (cipher not reported by SQL Server)` instead.
+
+Without a name, every connection is tested and the results are shown as a table:
+
+```bash
+clonio connection:test
+```
+
+```text
+ ────────────┬────────────┬─────────┬────────┬────────
+  Connection   Driver       TLS      Status   Time
+ ────────────┼────────────┼─────────┼────────┼────────
+  local        SQLite       —        OK       1ms
+  staging      MySQL        require  OK       38ms
+  prod         PostgreSQL   default  OK       55ms
+ ────────────┴────────────┴─────────┴────────┴────────
+
+All 3 connections OK.
+```
+
+The `TLS` column shows the same modes as `connection:list`. SQLite and dump connections show `—`. With `-v`, a `Cipher` column shows the negotiated cipher for each successful network connection.
 
 ## Update a connection
 
@@ -87,6 +107,8 @@ Secrets display as masked values. Press Enter to keep an existing secret or ente
 
 Transport security is preselected with the stored mode. Certificate path prompts show the stored path: press Enter to keep it, type `none` to remove it, or enter a new path.
 
+With `--no-interaction` and no name, the command only works when exactly one connection exists. With several connections it fails with exit code `2`; pass the name explicitly in scripts.
+
 ## Delete a connection
 
 ```bash
@@ -94,6 +116,12 @@ clonio connection:delete old-staging
 ```
 
 Deleting a connection removes it from `clonio.json`. It does not change committed `.cloning.yaml` files that reference the connection name.
+
+The command asks for confirmation before deleting. Non-interactively (`--no-interaction`), nothing is deleted without `--force`. Without a name and with several connections, it fails with exit code `2` instead of picking one:
+
+```bash
+clonio connection:delete old-staging --force --no-interaction
+```
 
 ## Security notes
 
