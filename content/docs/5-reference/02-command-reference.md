@@ -17,10 +17,10 @@ excerpt: Compact overview of common Clonio CLI commands.
 
 | Command | Purpose |
 |---|---|
-| `clonio connection:add` | Add a database or [dump](../1-connections/03-sql-dump-connections.md) connection. |
-| `clonio connection:list` | List configured connections. |
-| `clonio connection:test` | Test database connectivity. |
-| `clonio connection:update` | Update connection settings or secrets. |
+| `clonio connection:add` | Add a database or [dump](../1-connections/03-sql-dump-connections.md) connection, including [transport security](../1-connections/04-transport-security.md) (TLS). |
+| `clonio connection:list` | List configured connections and their TLS mode. |
+| `clonio connection:test` | Test database connectivity; `-v` shows the negotiated TLS cipher. |
+| `clonio connection:update` | Update connection settings, secrets or transport security. |
 | `clonio connection:delete` | Remove a connection. |
 
 ## Cloning

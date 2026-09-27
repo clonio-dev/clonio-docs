@@ -16,6 +16,8 @@ Clonio CLI supports the following connection drivers:
 | `sqlite` | Local SQLite databases and lightweight test fixtures |
 | `dump` | Virtual target only — writes a SQL-file archive instead of a live database (see [SQL Dump Connections](03-sql-dump-connections.md)) |
 
+All network drivers (`mysql`, `mariadb`, `pgsql`, `sqlsrv`) support encrypted connections. New connections use TLS by default; see [Transport Security](04-transport-security.md) for modes, certificates and per-driver details.
+
 ## Source and target
 
 The `.cloning.yaml` file names the source connection:
@@ -45,6 +47,8 @@ docker run --rm \
   -v "$(pwd)":/workspace \
   ghcr.io/clonio-dev/clonio:latest connection:test production
 ```
+
+With transport security `verify`, the server certificate must contain the host name Clonio dials. Inside Docker, that is `host.docker.internal` for a configured `localhost`/`127.0.0.1`, which is usually not in the certificate. Use the server's real DNS name, or `require` for a local database.
 
 ## Database grants
 
