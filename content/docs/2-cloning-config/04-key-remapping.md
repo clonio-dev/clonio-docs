@@ -61,7 +61,7 @@ or for a single run:
 clonio cloning:run production.cloning.yaml --target staging --no-remap-keys
 ```
 
-`--remap-keys` re-enables remapping for one run when the YAML sets `remap_keys: false`. `cloning:dump --no-remap-keys` writes `remap_keys: false` into a new config. `--skip-remapping-keys` still works as an alias of `--no-remap-keys`.
+`--remap-keys` re-enables remapping for one run when the YAML sets `remap_keys: false`. `cloning:dump --no-remap-keys` writes `remap_keys: false` into a new config.
 
 This is useful when the schema has many cross-references that are not declared as foreign keys, so remapping would leave them pointing at the old IDs.
 
