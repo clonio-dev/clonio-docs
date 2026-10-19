@@ -46,6 +46,29 @@ Key remapping helps keep the relational graph intact while reducing the risk of 
 - Disable foreign key checks with `disable_foreign_key_checks: true`, or
 - Manually handle type-based IDs after cloning
 
+## Disabling remapping
+
+Remapping can be turned off without removing its definition — persistently in the YAML:
+
+```yaml
+options:
+  remap_keys: false
+```
+
+or for a single run:
+
+```bash
+clonio cloning:run production.cloning.yaml --target staging --no-remap-keys
+```
+
+`--skip-remapping-keys` is an alias of `--no-remap-keys` and keeps working in existing scripts.
+
+`--remap-keys` re-enables remapping for one run when the YAML sets `remap_keys: false`. `cloning:dump --no-remap-keys` writes `remap_keys: false` into a new config.
+
+This is useful when the schema has many cross-references that are not declared as foreign keys, so remapping would leave them pointing at the old IDs.
+
+> **Warning:** With remapping disabled, primary and foreign key values are copied from production unchanged. If those IDs can identify people (see [Why it matters](#why-it-matters)), the target is less anonymized. `cloning:run` prints a notice whenever configured remapping is skipped.
+
 ## Large databases
 
 For large mappings, use file-based mapping storage:
