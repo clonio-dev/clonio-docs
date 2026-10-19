@@ -17,6 +17,7 @@ options:
   drop_unknown_tables: false
   drop_extra_columns: false
   disable_foreign_key_checks: true
+  remap_keys: true
   faker_locale: en_US
 
 tables:
@@ -49,6 +50,7 @@ tables:
 | `drop_unknown_tables` | Drop target tables absent from the source. |
 | `drop_extra_columns` | Drop target columns absent from the source. Destructive. |
 | `disable_foreign_key_checks` | Disable target FK checks during transfer where supported. |
+| `remap_keys` | Optional, default `true`. Set to `false` to skip [key remapping](04-key-remapping.md) while keeping its definition. |
 | `faker_locale` | Faker locale for `fake` strategies, such as `en_US` or `de_DE`. |
 
 ## Row strategies
