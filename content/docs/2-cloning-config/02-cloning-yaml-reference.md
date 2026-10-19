@@ -16,6 +16,7 @@ options:
   enforce_column_types: false
   drop_unknown_tables: false
   drop_extra_columns: false
+  recreate_tables: false
   disable_foreign_key_checks: true
   remap_keys: true
   faker_locale: en_US
@@ -49,6 +50,7 @@ tables:
 | `enforce_column_types` | Add source columns missing from the target. |
 | `drop_unknown_tables` | Drop target tables absent from the source. |
 | `drop_extra_columns` | Drop target columns absent from the source. Destructive. |
+| `recreate_tables` | Optional, default `false`. Drop each selected table that already exists on the target and re-create it from the source schema. Destructive. See "Recreating drifted tables" in [Dry Runs and Schema Sync](../3-running-clones/02-dry-runs-and-schema-sync.md). |
 | `disable_foreign_key_checks` | Disable target FK checks during transfer where supported. |
 | `remap_keys` | Optional, default `true`. Set to `false` to skip [key remapping](04-key-remapping.md) while keeping its definition. |
 | `faker_locale` | Faker locale for `fake` strategies, such as `en_US` or `de_DE`. |

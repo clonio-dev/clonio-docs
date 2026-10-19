@@ -99,8 +99,19 @@ Disable destructive options unless the target is disposable:
 ```bash
 clonio cloning:run production.cloning.yaml --target staging \
   --no-drop-unknown-tables \
-  --no-drop-extra-columns
+  --no-drop-extra-columns \
+  --no-recreate-tables
 ```
+
+## "Data too long for column" or similar insert errors
+
+The target table was created earlier with a narrower column type than the source now has. Schema sync doesn't alter existing columns, so rebuild the table from the source schema:
+
+```bash
+clonio cloning:run production.cloning.yaml --target staging --recreate-tables
+```
+
+This drops and re-creates every selected table on the target. See "Recreating drifted tables" in [Dry Runs and Schema Sync](../3-running-clones/02-dry-runs-and-schema-sync.md) before using it on a target you can't rebuild.
 
 ## A table is too large for CI
 

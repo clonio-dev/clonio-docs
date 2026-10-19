@@ -72,7 +72,7 @@ Both artefacts land in the current working directory:
 
 ## What the dump contains
 
-- **DDL** follows `options.drop_unknown_tables`: `true` emits `DROP TABLE IF EXISTS` + `CREATE TABLE`; `false` emits `CREATE TABLE IF NOT EXISTS`.
+- **DDL** follows `options.recreate_tables` and `options.drop_unknown_tables`: if either is `true`, the dump emits `DROP TABLE IF EXISTS` + `CREATE TABLE`; otherwise it emits `CREATE TABLE IF NOT EXISTS`.
 - **Inserts** are batched by `options.chunk_size`, one multi-row `INSERT` per chunk, with per-dialect syntax. Binary columns are hex-encoded.
 - **Cross-dialect mapping**: when the source DBMS differs from the dump dialect, column types map conservatively to the widest compatible target type; source length/precision is preserved where possible.
 - **Foreign-key handling** follows `options.disable_foreign_key_checks`; data is written in dependency order.
