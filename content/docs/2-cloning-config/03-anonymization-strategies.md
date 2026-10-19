@@ -74,6 +74,8 @@ notes:
   strategy: "null"
 ```
 
+Always quote `"null"`. Unquoted, YAML reads `strategy: null` as an empty value, not as the `null` strategy, and validation fails with a hint to add the quotes.
+
 ## `static`
 
 Use one fixed value for every row.
