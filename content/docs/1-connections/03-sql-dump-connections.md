@@ -76,6 +76,7 @@ Both artefacts land in the current working directory:
 - **Inserts** are batched by `options.chunk_size`, one multi-row `INSERT` per chunk, with per-dialect syntax. Binary columns are hex-encoded.
 - **Cross-dialect mapping**: when the source DBMS differs from the dump dialect, column types map conservatively to the widest compatible target type; source length/precision is preserved where possible.
 - **Foreign-key handling** follows `options.disable_foreign_key_checks`; data is written in dependency order.
+- **Generated columns** are created as plain, nullable columns without their expression, and their values are not included. Columns with the `exclude` strategy are left out of the `INSERT` statements too. See [Generated columns](../3-running-clones/02-dry-runs-and-schema-sync.md#generated-columns).
 
 For portability across all dialects, the v1 output omits `AUTO_INCREMENT`/`SERIAL`/`IDENTITY`, `DEFAULT` clauses, and foreign-key constraints — every value (including remapped keys) is copied explicitly.
 

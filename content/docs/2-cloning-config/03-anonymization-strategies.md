@@ -76,6 +76,19 @@ notes:
 
 Always quote `"null"`. Unquoted, YAML reads `strategy: null` as an empty value, not as the `null` strategy, and validation fails with a hint to add the quotes.
 
+## `exclude`
+
+Leave the column out of the transfer. Clonio does not read it from the source and does not write it to the target, so the target column gets its default value or `NULL`.
+
+```yaml
+internal_note:
+  strategy: exclude
+```
+
+Use it for columns whose data must never leave the source, or for columns the target computes itself. The target column must be nullable or have a default, otherwise inserts fail. Clonio prints a note when an excluded column is `NOT NULL` without a default on the target.
+
+Generated columns are left out automatically, see [Generated columns](../3-running-clones/02-dry-runs-and-schema-sync.md#generated-columns).
+
 ## `static`
 
 Use one fixed value for every row.

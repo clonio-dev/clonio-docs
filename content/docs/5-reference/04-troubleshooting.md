@@ -113,6 +113,22 @@ clonio cloning:run production.cloning.yaml --target staging --recreate-tables
 
 This drops and re-creates every selected table on the target. See "Recreating drifted tables" in [Dry Runs and Schema Sync](../3-running-clones/02-dry-runs-and-schema-sync.md) before using it on a target you can't rebuild.
 
+## "The value specified for generated column … is not allowed"
+
+MySQL error 3105 (and similar errors on other systems) means a value was written to a generated column. Clonio detects generated columns on the source and the target and leaves them out of the transfer, so update Clonio to the latest version.
+
+If a column still causes trouble, leave it out with the `exclude` strategy:
+
+```yaml
+tables:
+  bookings:
+    columns:
+      date:
+        strategy: exclude
+```
+
+Clonio does not recreate generation expressions on the target. See [Generated columns](../3-running-clones/02-dry-runs-and-schema-sync.md#generated-columns).
+
 ## A table is too large for CI
 
 Use row limits in `.cloning.yaml`, or skip the table for that run:
