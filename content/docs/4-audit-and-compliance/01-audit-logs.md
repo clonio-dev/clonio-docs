@@ -9,6 +9,10 @@ Clonio can produce audit artefacts for each run. These logs document what was ex
 
 Signed audit logs help you prove that the transferred dataset was processed through a reviewed configuration instead of an ad-hoc copy script.
 
+## Notes
+
+The audit log has a **Notes** section when a run left columns out of the transfer. It lists, per table, generated columns that were not copied, generation expressions that were not recreated on the target, and columns excluded with the `exclude` strategy. The section is missing when there is nothing to report.
+
 ## What to keep
 
 - Signed audit artefact for compliance review.

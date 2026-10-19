@@ -46,6 +46,33 @@ What to expect:
 - The option has no effect with `--skip-schema`.
 - For [SQL dump targets](../1-connections/03-sql-dump-connections.md), the dump contains `DROP TABLE IF EXISTS` before each `CREATE TABLE`.
 
+## Generated columns
+
+Generated (computed) columns are detected automatically:
+
+| DBMS | Detected as generated |
+|---|---|
+| MySQL / MariaDB | `VIRTUAL`, `STORED` or `PERSISTENT` generated columns |
+| PostgreSQL | `GENERATED ALWAYS AS (...) STORED` |
+| SQLite | `GENERATED ALWAYS AS (...)`, virtual or stored |
+| SQL Server | Computed columns (`AS ...`, with or without `PERSISTED`) |
+
+A column is left out of the transfer when it is generated on the source **or** on the target. Source values of generated columns are never copied, because they can be derived from personal data, for example `UPPER(name)`. When the target column is generated, the target database computes it from the anonymized values.
+
+**Clonio does not recreate generation expressions.** The expression only survives when a MySQL or MariaDB source is copied to a target of the same type and Clonio creates the table from the native table definition. In every other case the column is created as a plain, nullable column and stays empty:
+
+- transfers between different database systems, for example MySQL to PostgreSQL
+- columns added later with `enforce_column_types`
+- [SQL dump targets](../1-connections/03-sql-dump-connections.md)
+
+To keep generated columns, create them on the target yourself, for example with your migrations, and run with `--skip-schema`.
+
+Each affected table gets a note on the console, in the process log and in the **Notes** section of the [audit log](../4-audit-and-compliance/01-audit-logs.md):
+
+```
+Note: bookings: Generated columns not copied and left empty: day. The generation expression was not replicated to the target.
+```
+
 ## Skip schema sync
 
 If the target schema is already managed by migrations, skip schema replication:

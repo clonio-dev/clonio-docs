@@ -78,3 +78,5 @@ columns:
 ```
 
 See [Anonymization Strategies](03-anonymization-strategies.md) for strategy details.
+
+To leave a column out of the transfer entirely, use `strategy: exclude`. Generated columns are detected and left out automatically.
