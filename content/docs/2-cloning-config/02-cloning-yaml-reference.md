@@ -62,8 +62,24 @@ tables:
 | `full` | Copy all rows. |
 | `first` | Copy the first `limit` rows ordered by `sort_by` or primary key. |
 | `last` | Copy the last `limit` rows ordered by `sort_by` or primary key. |
+| `schema` | Create the table on the target but copy no rows. `rows.clear` is still honoured. |
+| `skip` | Leave the table out completely: no schema sync, no rows. Tables with a foreign key to a skipped table are skipped too. |
 
 `rows.clear` can be `false`, `delete`, or `truncate`.
+
+### Schema-only tables
+
+Use `schema` for tables whose structure the application needs but whose rows are transient or sensitive: cache, sessions, queues, password reset and API tokens, debug logs. [`cloning:dump`](../6-commands/09-cloning-dump.md#framework-tables) suggests it for known framework tables.
+
+```yaml
+tables:
+  sessions:
+    rows:
+      strategy: schema
+      clear: delete   # optional: empty existing target rows
+```
+
+Unlike `skip`, `schema` does not cascade: tables that reference a schema-only table are still copied, and their foreign key values point to rows that do not exist on the target. `cloning:run` adds a note to the table result, and inserts fail when foreign key checks are enabled (`disable_foreign_key_checks: false`). `first`/`last` with `limit: 0` is rejected; use `schema` instead.
 
 ## Columns
 

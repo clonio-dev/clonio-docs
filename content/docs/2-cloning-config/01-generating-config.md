@@ -18,7 +18,8 @@ The command:
 1. Connects to the named source connection from `clonio.json`.
 2. Reads tables and columns.
 3. Runs PII auto-detection against column names.
-4. Writes a YAML file such as `production.cloning.yaml`.
+4. Suggests the `schema` row strategy for known framework tables such as `cache`, `sessions` or `jobs`: the table is created, no rows are copied. See [framework tables](../6-commands/09-cloning-dump.md#framework-tables).
+5. Writes a YAML file such as `production.cloning.yaml`.
 
 The file is meant to be reviewed and committed. It contains connection names, not database credentials.
 
@@ -30,6 +31,7 @@ clonio cloning:dump --connection production --only-pii
 clonio cloning:dump --connection production --all-columns
 clonio cloning:dump --connection production --locale de_DE
 clonio cloning:dump --connection production --ci
+clonio cloning:dump --connection production --no-framework-tables
 ```
 
 ## Review checklist
@@ -37,6 +39,7 @@ clonio cloning:dump --connection production --ci
 - Confirm every sensitive column has an appropriate strategy.
 - Add columns that the matcher did not detect.
 - Change strategies where needed, for example from `hash` to `fake`.
+- Check the row strategy of tables with transient or sensitive rows (`schema` copies the structure only).
 - Add key remapping for production identifiers that must not survive in test data.
 - Choose safe schema synchronization options for your target.
 
