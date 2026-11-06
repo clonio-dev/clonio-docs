@@ -55,6 +55,17 @@ tables:
 | `remap_keys` | Optional, default `true`. Set to `false` to skip [key remapping](04-key-remapping.md) while keeping its definition. |
 | `faker_locale` | Faker locale for `fake` strategies, such as `en_US` or `de_DE`. |
 
+## Table names
+
+Table names under `tables`, in `skip:` and in the `--skip-tables` / `--only-tables` flags resolve to source tables like this:
+
+1. A name that matches a source table exactly means that table.
+2. Otherwise, a name that matches exactly one source table when case is ignored means that table. `Users` resolves to `users`.
+3. A name that matches several source tables when case is ignored (the source has both `users` and `Users`) stops the run with exit code `4`. Use the exact name.
+4. A name that matches no source table is kept as written. A `tables` entry is then reported as `not_found`.
+
+Two `tables` keys that resolve to the same table (`users` and `Users` with only `users` in the source) also stop the run with exit code `4`.
+
 ## Row strategies
 
 | Strategy | Description |
