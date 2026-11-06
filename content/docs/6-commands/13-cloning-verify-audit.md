@@ -72,6 +72,8 @@ clonio cloning:verify-audit audit.html --sig=/archive/2026/04/audit.sig
 
 Verification reverses steps 1–3 using the same `APP_KEY` and compares both values using `hash_equals()`.
 
+Because the signature is an HMAC, anyone who has `APP_KEY` can also create an audit log that this command accepts. Keep `APP_KEY` in your CI secret store. See [Security and Deployment](../4-audit-and-compliance/04-security-and-deployment.md).
+
 ## Audit Log File Naming
 
 Audit logs produced by `cloning:run` follow this naming pattern:

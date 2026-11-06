@@ -1,6 +1,6 @@
 ---
 title: Troubleshooting
-excerpt: Common Clonio CLI setup, connection, Docker, APP_KEY, and schema issues.
+excerpt: Common Clonio CLI setup, connection, Docker, APP_KEY, secret, and schema issues.
 ---
 
 # Troubleshooting
@@ -17,11 +17,26 @@ In CI, set `APP_KEY` as a secret environment variable. Do not generate a new key
 
 ## Encrypted passwords cannot be decrypted
 
-The `APP_KEY` changed. Restore the original key or re-enter passwords:
+The `APP_KEY` changed. Restore the original key, or replace the passwords, preferably with `env:` references that do not depend on `APP_KEY`:
 
 ```bash
 clonio connection:update production
 ```
+
+## "Environment variable … is not set"
+
+```text
+production: FAILED — Could not read password — environment variable CLONIO_PRODUCTION_PASSWORD is not set.
+```
+
+The connection stores its password as an `env:` reference, and the variable is missing from the environment of the process that runs Clonio. Set it, then retry:
+
+```bash
+export CLONIO_PRODUCTION_PASSWORD='…'
+clonio connection:test production
+```
+
+In CI, pass the secret to the step that runs Clonio. In Docker, pass it with `-e CLONIO_PRODUCTION_PASSWORD`. Audit channel secrets and dump ZIP passwords stored as `env:` references fail the same way when their variable is missing. To use a different variable, run `clonio connection:update production` (or `clonio audit:update <name>`) and choose **Read it from an environment variable**.
 
 ## Docker cannot reach localhost database
 

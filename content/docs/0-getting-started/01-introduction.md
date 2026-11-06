@@ -19,7 +19,7 @@ Manual sanitization scripts are hard to maintain, hard to audit, and easy to for
 
 ## Core capabilities
 
-- **Connection management** - store source and target database connections in a local `clonio.json` file with encrypted passwords.
+- **Connection management** - store source and target database connections in a local `clonio.json` file with passwords kept in environment variables (`env:` references) or stored encrypted.
 - **PII-aware config generation** - inspect a source database and generate a `.cloning.yaml` with suggested transformations.
 - **Column transformations** - use `fake`, `hash`, `mask`, `null`, `static`, or `keep` strategies per column.
 - **Row selection** - transfer full tables or only the first/last N rows.

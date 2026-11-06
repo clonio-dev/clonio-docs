@@ -27,6 +27,19 @@ docker run --rm -v "$(pwd)":/workspace \
 
 The image uses `/workspace` as the working directory. Mount your project root there so `.env`, `clonio.json`, and `.cloning.yaml` resolve as expected.
 
+## Pass secrets
+
+When `clonio.json` stores passwords as `env:NAME` references, pass the variables with `-e NAME`. Without a value, Docker takes it from the calling shell, so the secret does not appear on the command line:
+
+```bash
+docker run --rm \
+  -e APP_KEY -e CLONIO_ACCEPTANCE_PASSWORD -e CLONIO_LOCAL_DEV_PASSWORD \
+  -v "$(pwd)":/workspace \
+  ghcr.io/clonio-dev/clonio:latest cloning:run acceptance.cloning.yaml --target local-dev
+```
+
+`env:` references need no `APP_KEY` to resolve; `APP_KEY` is still used to sign the audit log. Do not bake `clonio.json` or `.env` into an image, and do not keep them in long-running containers that can reach production. See [Security and Deployment](../4-audit-and-compliance/04-security-and-deployment.md).
+
 ## Run with environment file
 
 ```bash
