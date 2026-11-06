@@ -42,6 +42,6 @@ In non-interactive mode (`--no-interaction`), the choice prompt is unavailable: 
 
 **Driver change** — Changing the driver type resets network fields (host, port) and optional fields (schema) that are not applicable to the new driver. The user is prompted for all required fields of the new driver without pre-filled defaults.
 
-**Password handling** — Passwords are stored as `env:NAME` references or encrypted with `APP_KEY`. The update command never exposes the stored value. Keeping the current password leaves it unchanged. See [`connection:add`](04-connection-add.md#passwords-environment-references-default-or-encrypted) and [Security and Deployment](../4-audit-and-compliance/04-security-and-deployment.md).
+**Password handling** — Passwords are stored as `env:NAME` references or encrypted with `CLONIO_KEY`. The update command never exposes the stored value. Keeping the current password leaves it unchanged. See [`connection:add`](04-connection-add.md#passwords-environment-references-default-or-encrypted) and [Security and Deployment](../4-audit-and-compliance/04-security-and-deployment.md).
 
 **Transport security changes** — The diff shows ssl.mode, ssl.ca, ssl.cert and ssl.key changes before saving.

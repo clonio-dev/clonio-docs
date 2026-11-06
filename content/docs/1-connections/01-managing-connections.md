@@ -5,7 +5,7 @@ excerpt: Add, test, update, list, and delete database connections for Clonio CLI
 
 # Managing Connections
 
-Clonio stores database connections in `clonio.json` in the current working directory. Passwords and other secrets are stored as `env:NAME` references to environment variables by default, so they are never written to disk. Alternatively, a secret can be stored encrypted with `APP_KEY` from your environment or `.env` file. See [Secrets](#secrets) and [Security and Deployment](../4-audit-and-compliance/04-security-and-deployment.md).
+Clonio stores database connections in `clonio.json` in the current working directory. Passwords and other secrets are stored as `env:NAME` references to environment variables by default, so they are never written to disk. Alternatively, a secret can be stored encrypted with `CLONIO_KEY` from your environment or `.env` file. See [Secrets](#secrets) and [Security and Deployment](../4-audit-and-compliance/04-security-and-deployment.md).
 
 Run commands from the project directory that owns the cloning configuration.
 
@@ -15,7 +15,7 @@ Run commands from the project directory that owns the cloning configuration.
 clonio init
 ```
 
-This ensures `APP_KEY` exists. Clonio uses it to encrypt secrets you choose to store in `clonio.json` and to sign audit logs. If `.gitignore` already exists, Clonio adds `.env` and `clonio.json` when missing.
+This ensures `CLONIO_KEY` exists (projects set up with earlier versions can keep using `APP_KEY` as a fallback). Clonio uses it to encrypt secrets you choose to store in `clonio.json` and to sign audit logs. If `.gitignore` already exists, Clonio adds `.env` and `clonio.json` when missing.
 
 ## Add a connection
 
@@ -133,9 +133,9 @@ A stored password has one of two forms:
 | Stored value | Meaning |
 |---|---|
 | `env:CLONIO_PRODUCTION_PASSWORD` | Read from the environment variable `CLONIO_PRODUCTION_PASSWORD` each time Clonio connects. Never written to disk. **Default.** |
-| `encrypted:<payload>` | Encrypted with `APP_KEY` and stored in `clonio.json`. |
+| `encrypted:<payload>` | Encrypted with `CLONIO_KEY` and stored in `clonio.json`. |
 
-An encrypted password is only as safe as `APP_KEY`, and `APP_KEY` usually sits in `.env` next to `clonio.json`: anyone who can read both files can decrypt it. Prefer environment references and provide the values from your secret store.
+An encrypted password is only as safe as the key, and the key usually sits in `.env` next to `clonio.json`: anyone who can read both files can decrypt it. Prefer environment references and provide the values from your secret store.
 
 If a referenced variable is not set, `connection:add` warns but saves the reference; `connection:test` and `cloning:run` fail with `environment variable … is not set` until you set it.
 
@@ -144,6 +144,6 @@ If a referenced variable is not set, `connection:add` warns but saves the refere
 - Prefer `env:` references for all secrets. See [Security and Deployment](../4-audit-and-compliance/04-security-and-deployment.md).
 - Do not commit `.env`.
 - Do not commit `clonio.json`.
-- Store `APP_KEY` as a CI secret for pipeline usage. It also signs audit logs.
-- Regenerating `APP_KEY` with `clonio init --force` makes existing encrypted passwords unreadable. `env:` references are not affected.
+- Store `CLONIO_KEY` as a CI secret for pipeline usage. It also signs audit logs.
+- Regenerating the key with `clonio init --force` makes existing encrypted passwords unreadable. `env:` references are not affected. To replace the key and keep the passwords, run [`clonio key:rotate`](../6-commands/17-key-rotate.md).
 - `clonio.json` stores certificate and key **paths**, never their contents. Keep private key files outside the project or in `.gitignore`, and restrict them with `chmod 600`.

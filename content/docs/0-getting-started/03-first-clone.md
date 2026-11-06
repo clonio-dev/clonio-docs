@@ -15,9 +15,9 @@ Run `init` from the directory where you want Clonio files to live:
 clonio init
 ```
 
-Clonio looks for `APP_KEY` in the process environment or in a local `.env` file. If none exists, it creates `.env` with a generated key and owner-only permissions.
+Clonio looks for `CLONIO_KEY` in the process environment or in a local `.env` file. Projects set up with earlier versions use `APP_KEY`, which still works as a fallback. If no key exists, `init` writes a generated `CLONIO_KEY` to `.env` with owner-only permissions.
 
-`APP_KEY` signs audit logs and encrypts any secret you choose to store in `clonio.json`. Do not commit `.env` or `clonio.json`.
+`CLONIO_KEY` signs audit logs and encrypts any secret you choose to store in `clonio.json`. Do not commit `.env` or `clonio.json`.
 
 ## 2. Add database connections
 
