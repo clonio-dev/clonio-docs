@@ -70,6 +70,8 @@ companies:
 
 Each address row is rewritten with the mapping of the table its `addressable_type` names. `type_value` is the value stored in the type column: the model class or its morph alias. Rows with a type that no entry names keep their source value.
 
+`cloning:dump` and `cloning:column:edit --strategy=remapping` add these entries for `<name>_type` + `<name>_id` column pairs, see [cloning:dump](../6-commands/09-cloning-dump.md#polymorphic-relations).
+
 `cloning:run` stops with exit code `4` when the same column is listed under more than one remapped table without `type_column`, when two entries share a `type_value`, or when the type column does not exist.
 
 ## Disabling remapping
