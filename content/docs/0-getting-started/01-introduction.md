@@ -5,6 +5,8 @@ excerpt: Learn what Clonio CLI is, why it exists, and how it helps teams clone d
 
 # Introduction
 
+[![Latest Release](https://img.shields.io/github/v/release/clonio-dev/clonio-cli)](https://github.com/clonio-dev/clonio-cli/releases/latest)
+
 Clonio CLI is a command-line tool for cloning production-like database data into development, test, staging, and CI environments. It reads from a source database, applies the transformation rules in a `.cloning.yaml` file, synchronizes the target schema where configured, and writes anonymized data to the target.
 
 There is no web application to operate. Clonio is designed for terminal-first workflows: local scripts, Docker, Composer, cron jobs, GitHub Actions, GitLab CI, and other pipeline runners.
