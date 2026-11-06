@@ -13,7 +13,7 @@
         ]
     },
     "scripts": {
-        "build": "vendor/bin/pergament generate-static public --content-path=content --base-url=\"https://clonio-dev.github.io\" --prefix=\"/clonio-docs\" --clean"
+        "build": "vendor/bin/pergament generate-static public --content-path=content --base-url=\"https://clonio.dev\" --clean"
     },
     "config": {
         "allow-plugins": {
