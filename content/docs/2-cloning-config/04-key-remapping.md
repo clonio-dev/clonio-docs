@@ -39,12 +39,38 @@ In this example, `users.id` receives new random values. `orders.user_id` and `em
 
 Key remapping helps keep the relational graph intact while reducing the risk of correlating target records back to production identifiers.
 
-## Limitations
+## Polymorphic relations
 
-**Polymorphic relations are not supported.** Key remapping only handles standard foreign keys (single `table` + `column`). If your schema uses Laravel's polymorphic relations (e.g., `commentable_type` + `commentable_id`), you must:
+A polymorphic column, such as Laravel's `addressable_type` + `addressable_id`, points at a different table per row. List it under each remapped table it can point at, and name the type column and the type value of that table:
 
-- Disable foreign key checks with `disable_foreign_key_checks: true`, or
-- Manually handle type-based IDs after cloning
+```yaml
+users:
+  columns:
+    id:
+      strategy: remapping
+      arguments:
+        - use: random_integer
+        - foreign_keys:
+            - table: addresses
+              column: addressable_id
+              type_column: addressable_type
+              type_value: App\Models\User   # or the morph alias, e.g. user
+companies:
+  columns:
+    id:
+      strategy: remapping
+      arguments:
+        - use: random_integer
+        - foreign_keys:
+            - table: addresses
+              column: addressable_id
+              type_column: addressable_type
+              type_value: App\Models\Company
+```
+
+Each address row is rewritten with the mapping of the table its `addressable_type` names. `type_value` is the value stored in the type column: the model class or its morph alias. Rows with a type that no entry names keep their source value.
+
+`cloning:run` stops with exit code `4` when the same column is listed under more than one remapped table without `type_column`, when two entries share a `type_value`, or when the type column does not exist.
 
 ## Disabling remapping
 
