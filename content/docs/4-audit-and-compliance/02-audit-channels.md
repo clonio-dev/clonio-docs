@@ -46,7 +46,7 @@ Secrets such as webhook URLs, SMTP passwords, S3 secret keys and ntfy tokens are
 | Stored value | Meaning |
 |---|---|
 | `env:NAME` | Read from the environment variable `NAME` when the audit log is delivered; never written to disk. **Default.** |
-| `encrypted:<payload>` | Encrypted with `APP_KEY` and stored in `clonio.json`. |
+| `encrypted:<payload>` | Encrypted with `CLONIO_KEY` and stored in `clonio.json`. |
 
 For each secret, `audit:add` and `audit:update` first ask how to get it. The default is an environment variable named `CLONIO_AUDIT_<CHANNEL>_<FIELD>`, for example `CLONIO_AUDIT_S3_BACKUP_SECRET_KEY`. Clonio warns if the variable is not set yet; delivery fails until it is.
 
@@ -56,4 +56,4 @@ clonio audit:add slack-alerts --type=slack --webhook-url=env:SLACK_AUDIT_WEBHOOK
 
 `--webhook-url=env:NAME` (and the other secret flags) stores the reference. Any other flag value is encrypted, and Clonio warns that it may end up in shell history.
 
-An encrypted secret is only as safe as `APP_KEY`. For production transfers, deliver audit logs to a channel outside the CI runner. See [Security and Deployment](04-security-and-deployment.md).
+An encrypted secret is only as safe as `CLONIO_KEY`. For production transfers, deliver audit logs to a channel outside the CI runner. See [Security and Deployment](04-security-and-deployment.md).

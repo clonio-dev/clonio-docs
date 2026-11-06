@@ -11,7 +11,8 @@ Every command links to its full reference page with all arguments, options, exit
 
 | Command | Purpose |
 |---|---|
-| [`clonio init`](../6-commands/01-init.md) | Ensure `APP_KEY` exists and create `clonio.json` with default audit channels. |
+| [`clonio init`](../6-commands/01-init.md) | Ensure `CLONIO_KEY` exists and create `clonio.json` with default audit channels. |
+| [`clonio key:rotate`](../6-commands/17-key-rotate.md) | Replace the encryption key and re-encrypt stored secrets. |
 | [`clonio update [version]`](../6-commands/02-update.md) | Update standalone binary or PHAR installations. |
 | [`clonio about`](../6-commands/03-about.md) | Show a short product description. |
 

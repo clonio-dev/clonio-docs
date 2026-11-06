@@ -1,11 +1,11 @@
 ---
 title: Troubleshooting
-excerpt: Common Clonio CLI setup, connection, Docker, APP_KEY, secret, and schema issues.
+excerpt: Common Clonio CLI setup, connection, Docker, CLONIO_KEY, secret, and schema issues.
 ---
 
 # Troubleshooting
 
-## `APP_KEY` is missing
+## `CLONIO_KEY` is missing
 
 Run:
 
@@ -13,11 +13,17 @@ Run:
 clonio init
 ```
 
-In CI, set `APP_KEY` as a secret environment variable. Do not generate a new key for every run if you need to decrypt existing `clonio.json` secrets.
+In CI, set `CLONIO_KEY` as a secret environment variable. Do not generate a new key for every run if you need to decrypt existing `clonio.json` secrets.
+
+Projects set up with earlier versions use `APP_KEY`. Clonio still reads it when `CLONIO_KEY` is not set. To move to `CLONIO_KEY`, run [`clonio key:rotate`](../6-commands/17-key-rotate.md).
 
 ## Encrypted passwords cannot be decrypted
 
-The `APP_KEY` changed. Restore the original key, or replace the passwords, preferably with `env:` references that do not depend on `APP_KEY`:
+```text
+production: FAILED — Could not decrypt password — check CLONIO_KEY (or APP_KEY).
+```
+
+The key is missing or changed. Restore the original key, or replace the passwords, preferably with `env:` references that do not depend on the key:
 
 ```bash
 clonio connection:update production

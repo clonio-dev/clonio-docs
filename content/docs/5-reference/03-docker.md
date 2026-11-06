@@ -33,12 +33,12 @@ When `clonio.json` stores passwords as `env:NAME` references, pass the variables
 
 ```bash
 docker run --rm \
-  -e APP_KEY -e CLONIO_ACCEPTANCE_PASSWORD -e CLONIO_LOCAL_DEV_PASSWORD \
+  -e CLONIO_KEY -e CLONIO_ACCEPTANCE_PASSWORD -e CLONIO_LOCAL_DEV_PASSWORD \
   -v "$(pwd)":/workspace \
   ghcr.io/clonio-dev/clonio:latest cloning:run acceptance.cloning.yaml --target local-dev
 ```
 
-`env:` references need no `APP_KEY` to resolve; `APP_KEY` is still used to sign the audit log. Do not bake `clonio.json` or `.env` into an image, and do not keep them in long-running containers that can reach production. See [Security and Deployment](../4-audit-and-compliance/04-security-and-deployment.md).
+`env:` references need no key to resolve; `CLONIO_KEY` is still used to sign the audit log. Do not bake `clonio.json` or `.env` into an image, and do not keep them in long-running containers that can reach production. See [Security and Deployment](../4-audit-and-compliance/04-security-and-deployment.md).
 
 ## Run with environment file
 

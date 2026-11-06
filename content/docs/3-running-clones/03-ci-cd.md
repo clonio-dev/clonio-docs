@@ -5,7 +5,7 @@ excerpt: Run Clonio from GitHub Actions, GitLab CI, Composer, or Docker.
 
 # CI/CD Usage
 
-Clonio CLI is designed for pipelines. Store database passwords as `env:NAME` references in `clonio.json`, keep the values and `APP_KEY` in the CI secret store, provide database access from the runner, and run with `--ci`.
+Clonio CLI is designed for pipelines. Store database passwords as `env:NAME` references in `clonio.json`, keep the values and `CLONIO_KEY` in the CI secret store, provide database access from the runner, and run with `--ci`.
 
 Pass the secrets only to the step that runs the clone. A step that registers connections with `env:` references stores no secrets and needs none. For the full deployment model (ephemeral runners, read-only replica user, external audit channel), see [Security and Deployment](../4-audit-and-compliance/04-security-and-deployment.md).
 
@@ -18,12 +18,12 @@ Pass the secrets only to the step that runs the clone. A step that registers con
 - name: Clone staging database
   run: vendor/bin/clonio cloning:run production.cloning.yaml --target staging --ci
   env:
-    APP_KEY: ${{ secrets.CLONIO_APP_KEY }}
+    CLONIO_KEY: ${{ secrets.CLONIO_KEY }}
     CLONIO_PRODUCTION_PASSWORD: ${{ secrets.CLONIO_PRODUCTION_PASSWORD }}
     CLONIO_STAGING_PASSWORD: ${{ secrets.CLONIO_STAGING_PASSWORD }}
 ```
 
-Here `clonio.json` stores `env:CLONIO_PRODUCTION_PASSWORD` and `env:CLONIO_STAGING_PASSWORD`. `APP_KEY` signs the audit log.
+Here `clonio.json` stores `env:CLONIO_PRODUCTION_PASSWORD` and `env:CLONIO_STAGING_PASSWORD`. `CLONIO_KEY` signs the audit log.
 
 ## GitLab CI with Composer
 
@@ -34,11 +34,9 @@ cloning:
     - composer install --no-interaction
   script:
     - vendor/bin/clonio cloning:run production.cloning.yaml --target staging --ci
-  variables:
-    APP_KEY: $CLONIO_APP_KEY
 ```
 
-Define `CLONIO_APP_KEY`, `CLONIO_PRODUCTION_PASSWORD` and `CLONIO_STAGING_PASSWORD` as masked, protected CI/CD variables; GitLab passes them to the job as environment variables. Project variables are visible to every job in the project, so scope them to the cloning job's environment where possible.
+Define `CLONIO_KEY`, `CLONIO_PRODUCTION_PASSWORD` and `CLONIO_STAGING_PASSWORD` as masked, protected CI/CD variables; GitLab passes them to the job as environment variables. Project variables are visible to every job in the project, so scope them to the cloning job's environment where possible.
 
 ## Encrypted database connections
 
@@ -60,7 +58,7 @@ Store the database CA certificate as a CI secret, write it to a file, and point 
 - name: Clone staging database
   run: vendor/bin/clonio cloning:run production.cloning.yaml --target staging --ci
   env:
-    APP_KEY: ${{ secrets.CLONIO_APP_KEY }}
+    CLONIO_KEY: ${{ secrets.CLONIO_KEY }}
     CLONIO_PRODUCTION_PASSWORD: ${{ secrets.CLONIO_PRODUCTION_PASSWORD }}
     CLONIO_STAGING_PASSWORD: ${{ secrets.CLONIO_STAGING_PASSWORD }}
 ```
@@ -75,12 +73,12 @@ Relative certificate paths resolve against the working directory, so write the f
 - name: Run Clonio
   run: |
     docker run --rm \
-      -e APP_KEY -e CLONIO_PRODUCTION_PASSWORD -e CLONIO_STAGING_PASSWORD \
+      -e CLONIO_KEY -e CLONIO_PRODUCTION_PASSWORD -e CLONIO_STAGING_PASSWORD \
       -v "${{ github.workspace }}":/workspace \
       ghcr.io/clonio-dev/clonio:1.2.3 \
       cloning:run production.cloning.yaml --target staging --ci
   env:
-    APP_KEY: ${{ secrets.CLONIO_APP_KEY }}
+    CLONIO_KEY: ${{ secrets.CLONIO_KEY }}
     CLONIO_PRODUCTION_PASSWORD: ${{ secrets.CLONIO_PRODUCTION_PASSWORD }}
     CLONIO_STAGING_PASSWORD: ${{ secrets.CLONIO_STAGING_PASSWORD }}
 ```
