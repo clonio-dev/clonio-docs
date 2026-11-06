@@ -19,7 +19,7 @@ clonio cloning:run production.cloning.yaml --target staging --skip-tables=audit_
 clonio cloning:run production.cloning.yaml --target staging --only-tables=users,orders
 ```
 
-`--skip-tables` and `--only-tables` are mutually exclusive. `--only-tables` never widens a run: tables skipped in the YAML (`skip:` or `rows.strategy: skip`) stay skipped. A value without any table name, such as `--only-tables=' , '`, is rejected with exit code `4`.
+`--skip-tables` and `--only-tables` are mutually exclusive. `--only-tables` never widens a run: tables skipped in the YAML (`skip:` or `rows.strategy: skip`) stay skipped. A value without any table name, such as `--only-tables=' , '`, is rejected with exit code `4`. A name that matches no table in the config prints a warning; if no `--only-tables` name matches, the run stops with exit code `4`.
 
 ## Break on first failure
 
