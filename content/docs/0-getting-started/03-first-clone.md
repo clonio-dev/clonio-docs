@@ -17,7 +17,7 @@ clonio init
 
 Clonio looks for `APP_KEY` in the process environment or in a local `.env` file. If none exists, it creates `.env` with a generated key and owner-only permissions.
 
-`APP_KEY` encrypts database passwords in `clonio.json`. Do not commit `.env` or `clonio.json`.
+`APP_KEY` signs audit logs and encrypts any secret you choose to store in `clonio.json`. Do not commit `.env` or `clonio.json`.
 
 ## 2. Add database connections
 
@@ -32,6 +32,15 @@ Add a target connection:
 ```bash
 clonio connection:add local-dev
 ```
+
+For the password, Clonio asks for an environment variable by default (for example `CLONIO_PRODUCTION_PASSWORD`) and stores only the reference `env:CLONIO_PRODUCTION_PASSWORD`. Export the variable before testing or running a clone:
+
+```bash
+export CLONIO_PRODUCTION_PASSWORD='…'
+export CLONIO_LOCAL_DEV_PASSWORD='…'
+```
+
+See [Security and Deployment](../4-audit-and-compliance/04-security-and-deployment.md) for where to run transfers from production.
 
 Test connections before generating a config:
 

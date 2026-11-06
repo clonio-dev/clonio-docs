@@ -5,7 +5,9 @@ excerpt: Run Clonio from GitHub Actions, GitLab CI, Composer, or Docker.
 
 # CI/CD Usage
 
-Clonio CLI is designed for pipelines. Store `APP_KEY` as a CI secret, provide database access from the runner, and run with `--ci`.
+Clonio CLI is designed for pipelines. Store database passwords as `env:NAME` references in `clonio.json`, keep the values and `APP_KEY` in the CI secret store, provide database access from the runner, and run with `--ci`.
+
+Pass the secrets only to the step that runs the clone. A step that registers connections with `env:` references stores no secrets and needs none. For the full deployment model (ephemeral runners, read-only replica user, external audit channel), see [Security and Deployment](../4-audit-and-compliance/04-security-and-deployment.md).
 
 ## GitHub Actions with Composer
 
@@ -17,7 +19,11 @@ Clonio CLI is designed for pipelines. Store `APP_KEY` as a CI secret, provide da
   run: vendor/bin/clonio cloning:run production.cloning.yaml --target staging --ci
   env:
     APP_KEY: ${{ secrets.CLONIO_APP_KEY }}
+    CLONIO_PRODUCTION_PASSWORD: ${{ secrets.CLONIO_PRODUCTION_PASSWORD }}
+    CLONIO_STAGING_PASSWORD: ${{ secrets.CLONIO_STAGING_PASSWORD }}
 ```
+
+Here `clonio.json` stores `env:CLONIO_PRODUCTION_PASSWORD` and `env:CLONIO_STAGING_PASSWORD`. `APP_KEY` signs the audit log.
 
 ## GitLab CI with Composer
 
@@ -32,6 +38,8 @@ cloning:
     APP_KEY: $CLONIO_APP_KEY
 ```
 
+Define `CLONIO_APP_KEY`, `CLONIO_PRODUCTION_PASSWORD` and `CLONIO_STAGING_PASSWORD` as masked, protected CI/CD variables; GitLab passes them to the job as environment variables. Project variables are visible to every job in the project, so scope them to the cloning job's environment where possible.
+
 ## Encrypted database connections
 
 Store the database CA certificate as a CI secret, write it to a file, and point the connection at it:
@@ -42,16 +50,22 @@ Store the database CA certificate as a CI secret, write it to a file, and point 
   env:
     DB_CA_PEM: ${{ secrets.DB_CA_PEM }}
 
-- name: Register connection
+- name: Register connection (reference only, no secret needed)
   run: |
     vendor/bin/clonio connection:add production --type=mysql \
       --host=db.example.com --port=3306 --database=app \
-      --username=clonio --password="$DB_PASSWORD" \
+      --username=clonio_ro --password=env:CLONIO_PRODUCTION_PASSWORD \
       --ssl-mode=verify --ssl-ca=db-ca.pem --production --no-interaction
+
+- name: Clone staging database
+  run: vendor/bin/clonio cloning:run production.cloning.yaml --target staging --ci
   env:
     APP_KEY: ${{ secrets.CLONIO_APP_KEY }}
-    DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+    CLONIO_PRODUCTION_PASSWORD: ${{ secrets.CLONIO_PRODUCTION_PASSWORD }}
+    CLONIO_STAGING_PASSWORD: ${{ secrets.CLONIO_STAGING_PASSWORD }}
 ```
+
+`--password=env:CLONIO_PRODUCTION_PASSWORD` stores only the reference, so the register step gets no secrets. Clonio reads the password when the clone step connects. Do not pass `--password="$DB_PASSWORD"`: any value other than `env:NAME` is stored encrypted in `clonio.json`.
 
 Relative certificate paths resolve against the working directory, so write the file where `clonio.json` expects it. If the CA isn't available in the pipeline, `--ssl-mode=require` encrypts without verifying the server. See [Transport Security](../1-connections/04-transport-security.md).
 
@@ -61,11 +75,17 @@ Relative certificate paths resolve against the working directory, so write the f
 - name: Run Clonio
   run: |
     docker run --rm \
-      -e APP_KEY="${{ secrets.CLONIO_APP_KEY }}" \
+      -e APP_KEY -e CLONIO_PRODUCTION_PASSWORD -e CLONIO_STAGING_PASSWORD \
       -v "${{ github.workspace }}":/workspace \
       ghcr.io/clonio-dev/clonio:1.2.3 \
       cloning:run production.cloning.yaml --target staging --ci
+  env:
+    APP_KEY: ${{ secrets.CLONIO_APP_KEY }}
+    CLONIO_PRODUCTION_PASSWORD: ${{ secrets.CLONIO_PRODUCTION_PASSWORD }}
+    CLONIO_STAGING_PASSWORD: ${{ secrets.CLONIO_STAGING_PASSWORD }}
 ```
+
+`-e NAME` without a value passes the variable from the step's environment into the container, so the secrets do not appear on the command line.
 
 Pin exact Docker tags in CI. Use `latest` only for interactive local use.
 

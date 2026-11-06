@@ -19,11 +19,11 @@ This is built for air-gapped or multi-stage environments where the source and ta
 clonio connection:add staging-dump \
   --type=dump \
   --dialect=pgsql \
-  --password="$ZIP_PASSWORD"
+  --password=env:CLONIO_STAGING_DUMP_ZIP_PASSWORD
 ```
 
 - `--dialect` (required): the target DBMS — `mysql`, `mariadb`, `pgsql`, `sqlsrv`, or `sqlite`.
-- `--password` (optional): ZIP archive password, stored encrypted with `APP_KEY`. Omit for an unencrypted archive.
+- `--password` (optional): ZIP archive password. `env:NAME` stores a reference to an environment variable, which Clonio reads when it writes the archive; any other value is stored encrypted with `APP_KEY`. Omit for an unencrypted archive. See [Security and Deployment](../4-audit-and-compliance/04-security-and-deployment.md).
 
 The resulting `clonio.json` entry:
 
@@ -31,7 +31,7 @@ The resulting `clonio.json` entry:
 "staging-dump": {
   "type": "dump",
   "dialect": "pgsql",
-  "password": "encrypted:eyJpdiI6..."
+  "password": "env:CLONIO_STAGING_DUMP_ZIP_PASSWORD"
 }
 ```
 

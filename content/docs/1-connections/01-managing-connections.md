@@ -5,7 +5,7 @@ excerpt: Add, test, update, list, and delete database connections for Clonio CLI
 
 # Managing Connections
 
-Clonio stores database connections in `clonio.json` in the current working directory. Passwords and other secrets are encrypted with `APP_KEY` from your environment or `.env` file.
+Clonio stores database connections in `clonio.json` in the current working directory. Passwords and other secrets are stored as `env:NAME` references to environment variables by default, so they are never written to disk. Alternatively, a secret can be stored encrypted with `APP_KEY` from your environment or `.env` file. See [Secrets](#secrets) and [Security and Deployment](../4-audit-and-compliance/04-security-and-deployment.md).
 
 Run commands from the project directory that owns the cloning configuration.
 
@@ -15,7 +15,7 @@ Run commands from the project directory that owns the cloning configuration.
 clonio init
 ```
 
-This ensures `APP_KEY` exists. If `.gitignore` already exists, Clonio adds `.env` and `clonio.json` when missing.
+This ensures `APP_KEY` exists. Clonio uses it to encrypt secrets you choose to store in `clonio.json` and to sign audit logs. If `.gitignore` already exists, Clonio adds `.env` and `clonio.json` when missing.
 
 ## Add a connection
 
@@ -30,7 +30,8 @@ Without flags, Clonio prompts for:
 - host and port
 - database name or SQLite path
 - PostgreSQL schema when relevant
-- username and password
+- username
+- how to get the password: from an environment variable (default, stores `env:CLONIO_<NAME>_PASSWORD` or another name you enter) or entered now and stored encrypted
 - transport security for network drivers: `require` (default, except SQL Server which defaults to `verify`), `verify`, `disable` or driver default, plus certificate paths when needed (see [Transport Security](04-transport-security.md))
 - whether this is a production connection
 
@@ -43,11 +44,13 @@ clonio connection:add production \
   --port=5432 \
   --database=app \
   --schema=public \
-  --username=clonio \
-  --password="$DB_PASSWORD" \
+  --username=clonio_ro \
+  --password=env:CLONIO_PRODUCTION_PASSWORD \
   --ssl-mode=verify --ssl-ca=certs/production-ca.pem \
   --production
 ```
+
+`--password=env:CLONIO_PRODUCTION_PASSWORD` stores only the reference. Clonio reads the password from `CLONIO_PRODUCTION_PASSWORD` each time it connects. Without interaction and without `--password`, a network connection stores `env:CLONIO_<NAME>_PASSWORD`.
 
 New network connections use `--ssl-mode=require` when no mode is given, except SQL Server which uses `--ssl-mode=verify` (ODBC Driver 18 already verifies by default). A server without TLS, such as the stock `postgres` Docker image, needs `--ssl-mode=disable`.
 
@@ -103,7 +106,7 @@ The `TLS` column shows the same modes as `connection:list`. SQLite and dump conn
 clonio connection:update production
 ```
 
-Secrets display as masked values. Press Enter to keep an existing secret or enter a new value to replace it.
+The stored password is never decrypted or shown. Clonio asks how to get the password: keep the current one (default), read it from an environment variable, or enter it now and store it encrypted.
 
 Transport security is preselected with the stored mode. Certificate path prompts show the stored path: press Enter to keep it, type `none` to remove it, or enter a new path.
 
@@ -123,10 +126,24 @@ The command asks for confirmation before deleting. Non-interactively (`--no-inte
 clonio connection:delete old-staging --force --no-interaction
 ```
 
+## Secrets
+
+A stored password has one of two forms:
+
+| Stored value | Meaning |
+|---|---|
+| `env:CLONIO_PRODUCTION_PASSWORD` | Read from the environment variable `CLONIO_PRODUCTION_PASSWORD` each time Clonio connects. Never written to disk. **Default.** |
+| `encrypted:<payload>` | Encrypted with `APP_KEY` and stored in `clonio.json`. |
+
+An encrypted password is only as safe as `APP_KEY`, and `APP_KEY` usually sits in `.env` next to `clonio.json`: anyone who can read both files can decrypt it. Prefer environment references and provide the values from your secret store.
+
+If a referenced variable is not set, `connection:add` warns but saves the reference; `connection:test` and `cloning:run` fail with `environment variable … is not set` until you set it.
+
 ## Security notes
 
+- Prefer `env:` references for all secrets. See [Security and Deployment](../4-audit-and-compliance/04-security-and-deployment.md).
 - Do not commit `.env`.
 - Do not commit `clonio.json`.
-- Store `APP_KEY` as a CI secret for pipeline usage.
-- Regenerating `APP_KEY` with `clonio init --force` makes existing encrypted passwords unreadable.
+- Store `APP_KEY` as a CI secret for pipeline usage. It also signs audit logs.
+- Regenerating `APP_KEY` with `clonio init --force` makes existing encrypted passwords unreadable. `env:` references are not affected.
 - `clonio.json` stores certificate and key **paths**, never their contents. Keep private key files outside the project or in `.gitignore`, and restrict them with `chmod 600`.

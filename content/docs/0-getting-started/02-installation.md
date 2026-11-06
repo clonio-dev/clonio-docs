@@ -76,7 +76,7 @@ php clonio.phar --version
 
 - PHP 8.5 or newer for Composer and PHAR usage.
 - Database network access from the machine, container, or CI runner that executes Clonio.
-- `APP_KEY` for encrypting and decrypting stored secrets.
+- `APP_KEY` for signing audit logs and for encrypting and decrypting secrets stored in `clonio.json`. Secrets stored as `env:NAME` references are read from the environment instead.
 
 ## Update
 

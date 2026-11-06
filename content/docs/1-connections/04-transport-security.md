@@ -56,7 +56,7 @@ Non-interactive options:
 
 ```bash
 clonio connection:add production --type=mysql --host=db.example.com --port=3306 \
-  --database=app --username=clonio --password="$DB_PASSWORD" \
+  --database=app --username=clonio --password=env:CLONIO_PRODUCTION_PASSWORD \
   --ssl-mode=verify --ssl-ca=certs/production-ca.pem --production --no-interaction
 ```
 
@@ -86,7 +86,7 @@ Some servers require the client to present a certificate, such as a MySQL user w
 
 ```bash
 clonio connection:add production --type=pgsql --host=db.example.com --port=5432 \
-  --database=app --schema=public --username=clonio --password="$DB_PASSWORD" \
+  --database=app --schema=public --username=clonio --password=env:CLONIO_PRODUCTION_PASSWORD \
   --ssl-mode=verify --ssl-ca=certs/ca.pem \
   --ssl-cert=certs/clonio.pem --ssl-key=certs/clonio-key.pem --no-interaction
 ```
@@ -135,7 +135,7 @@ production: OK (38ms, tls: verify)
   "port": 3306,
   "database": "app",
   "username": "clonio",
-  "password": "encrypted:…",
+  "password": "env:CLONIO_PRODUCTION_PASSWORD",
   "is_production": true,
   "ssl": {
     "mode": "verify",
