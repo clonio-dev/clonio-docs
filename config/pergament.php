@@ -304,6 +304,10 @@ return [
 
     'search' => [
         'enabled' => true,
+
+        // Expose a read-only "search" tool to in-browser AI agents via WebMCP
+        // (navigator.modelContext). Requires search to be enabled.
+        'webmcp' => true,
     ],
 
     /*
