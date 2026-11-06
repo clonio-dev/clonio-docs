@@ -35,6 +35,10 @@ clonio cloning:run production.cloning.yaml --target local-dev
 
 The target may be a live database or a `dump` connection that writes the anonymized result to a portable SQL-file archive. A `dump` connection can only be used as a target, never as a source.
 
+## SQL Server schemas
+
+A `sqlsrv` connection reads and writes only the login's default schema (`SCHEMA_NAME()`, usually `dbo`). Tables in other schemas are ignored, even when a table with the same name exists there. To clone another schema, connect with a login whose default schema is that schema. The `schema` setting of a connection has no effect on SQL Server.
+
 ## Docker networking
 
 When running Clonio in Docker, `localhost` points to the container, not the host. Clonio detects container execution and rewrites loopback hostnames to `host.docker.internal` in memory.

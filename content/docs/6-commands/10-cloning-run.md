@@ -25,7 +25,7 @@ clonio cloning:run <file> [options]
 |--------|-------------|
 | `--target=<name>` | Name of the target connection (from `clonio.json`). May be a live database or a [`dump`](../1-connections/03-sql-dump-connections.md) connection that writes a SQL-file archive instead. |
 | `--allow-failure` | Exit with code `0` even if the run fails (for optional CI steps) |
-| `--dry-run` | Validate, test connections, and count rows — no data is transferred |
+| `--dry-run` | Validate, test connections, and estimate rows — no data is transferred |
 | `--ci` | CI mode — suppress all non-error output; `--target` is required |
 | `--skip-schema` | Skip schema replication; assume the target schema already matches |
 | `--skip-tables=<list>` | Comma-separated list of table names to exclude from this run |
@@ -96,16 +96,20 @@ clonio cloning:run production-db.cloning.yaml --target staging --dry-run
 
   Table                   Rows (est.)   Strategy   Transformations
   ─────────────────────────────────────────────────────────────────
-  users                    12 340       last 5000   email, first_name, password
-  orders                   48 201       full        shipping_address
+  users                    ~5 000       last 5000   email, first_name, password
+  orders                  ~48 201       full        shipping_address
   audit_logs              NOT FOUND     —           —
-  product_catalog             923       full        (none)
+  product_catalog            ~923       full        (none)
   sessions                      0       schema      —
   ─────────────────────────────────────────────────────────────────
-  Total                    61 464 rows across 4 tables (1 not found, will be skipped)
+  Total                   ~54 124 rows across 4 tables (1 not found, will be skipped)
 
   No data will be transferred. Run without --dry-run to execute.
 ```
+
+#### Row estimates
+
+The dry run never scans a large source table. MySQL, MariaDB, PostgreSQL and SQL Server answer from catalog statistics (`information_schema.TABLES.TABLE_ROWS`, `pg_class.reltuples`, `sys.partitions`). These numbers are estimates and can be off in either direction. They are marked with `~`, and so is the total when any table in it is estimated. A `first` / `last` table shows the estimate capped at its `limit`. SQLite keeps no such statistics and counts, bounded by the `limit` of a `first` / `last` table; these exact numbers carry no `~`. `schema` tables show `0` and are not queried. `?` means the estimate is unknown: the query failed, or PostgreSQL has not analyzed the table yet (run `ANALYZE`). The live progress totals of a real run use the same estimates.
 
 When source and target schemas are identical, the diff block shows:
 
@@ -433,7 +437,7 @@ Resolves the source connection (from the YAML `connection` field) and the target
 
 ### Phase 3 — Dry-run
 
-Only runs when `--dry-run` is set. Fetches both the source and target schemas, computes the schema diff, counts estimated rows per table, and prints a summary. Tables not found in the source are shown as `NOT FOUND`. Exits with code `0` after printing the summary.
+Only runs when `--dry-run` is set. Fetches both the source and target schemas, computes the schema diff, estimates the rows per table (see [Row estimates](#row-estimates)), and prints a summary. Tables not found in the source are shown as `NOT FOUND`. Exits with code `0` after printing the summary.
 
 ### Phase 4 — Schema Replication
 
@@ -487,7 +491,7 @@ Prints the run summary. Tables not found in the source are always listed, regard
 
 ### `--skip-tables` and `--only-tables`
 
-Both flags accept a comma-separated list of exact table names. Glob patterns and regex are not supported. Spaces around commas are trimmed.
+Both flags accept a comma-separated list of table names. Glob patterns and regex are not supported. Spaces around commas are trimmed. Names resolve like [`tables` keys](../2-cloning-config/02-cloning-yaml-reference.md#table-names): an exact match wins, then a unique match that differs only in case, so `--skip-tables=Users` skips the source table `users`.
 
 ```bash
 # Skip two tables
@@ -497,7 +501,17 @@ clonio cloning:run prod.cloning.yaml --target staging --skip-tables=audit_logs,s
 clonio cloning:run prod.cloning.yaml --target staging --only-tables=users,orders
 ```
 
-Using both flags together is a `ValidationError (4)`.
+Using both flags together is a `ValidationError (4)`. So is a value that holds no table name, such as `--only-tables=' , '`: it does not turn the filter off. A missing or empty flag counts as not given. The same rule applies to `--audit-channel`.
+
+`--only-tables` narrows a run but never widens it. A table in the YAML `skip:` list or with `rows.strategy: skip` stays skipped, even when you name it in `--only-tables`.
+
+A name that matches no table in the config, after name resolution, prints a warning and the run continues:
+
+```
+  Warning: --only-tables name "usrs" matches no table in the config
+```
+
+The warning also appears with `--ci` and is logged as `table_filter_unmatched`. If no `--only-tables` name matches, nothing would be cloned, so the run stops with `ValidationError (4)`. Names in the YAML `skip:` list are not checked. A dry run does not apply the filters, so it shows no warning.
 
 ### FK-Dependent Cascade
 
@@ -639,7 +653,7 @@ Progress bars are suppressed when `--ci` is active regardless of verbosity level
 | `1` | Run failed — one or more tables had unrecoverable transfer errors |
 | `2` | Config error — `clonio.json` missing, or `APP_KEY` not set |
 | `3` | Connection error — source or target unreachable |
-| `4` | Validation error — YAML invalid, `--skip-tables` + `--only-tables` combined, or CI without `--target` |
+| `4` | Validation error — YAML invalid, `--skip-tables` + `--only-tables` combined, an ambiguous table name, `--only-tables` matching no table, or CI without `--target` |
 | `5` | IO error — YAML file not found or not readable |
 
 ## Audit & Process Logs

@@ -55,6 +55,17 @@ tables:
 | `remap_keys` | Optional, default `true`. Set to `false` to skip [key remapping](04-key-remapping.md) while keeping its definition. |
 | `faker_locale` | Faker locale for `fake` strategies, such as `en_US` or `de_DE`. |
 
+## Table names
+
+Table names under `tables`, in `skip:`, in `key_remapping` (the remapped table and each `foreign_keys` table) and in the `--skip-tables` / `--only-tables` flags resolve to source tables like this:
+
+1. A name that matches a source table exactly means that table.
+2. Otherwise, a name that matches exactly one source table when case is ignored means that table. `Users` resolves to `users`.
+3. A name that matches several source tables when case is ignored (the source has both `users` and `Users`) stops the run with exit code `4`. Use the exact name.
+4. A name that matches no source table is kept as written. A `tables` entry is then reported as `not_found`.
+
+Two `tables` keys that resolve to the same table (`users` and `Users` with only `users` in the source) also stop the run with exit code `4`. The same goes for two `key_remapping` entries that resolve to the same table, and for a `key_remapping` entry whose table resolves to a table without a `tables` entry.
+
 ## Row strategies
 
 | Strategy | Description |
@@ -80,6 +91,12 @@ tables:
 ```
 
 Unlike `skip`, `schema` does not cascade: tables that reference a schema-only table are still copied, and their foreign key values point to rows that do not exist on the target. `cloning:run` adds a note to the table result, and inserts fail when foreign key checks are enabled (`disable_foreign_key_checks: false`). `first`/`last` with `limit: 0` is rejected; use `schema` instead.
+
+### PostgreSQL partitioned tables
+
+Clonio treats a partitioned table as one table. Reading it returns the rows of all its partitions, so the partitions themselves are not listed: `cloning:dump` leaves them out, and a `tables:` entry for a partition (e.g. `events_2026`) is reported as `not_found`. Configure the parent table (`events`) instead. Its `rows` and `columns` rules apply to the rows of every partition.
+
+When Clonio creates the table on the target, it creates a plain, non-partitioned table with the parent's columns. To keep partitioning on the target, create the partitioned table and its partitions there yourself (for example with your migrations) and keep the default `recreate_tables: false`: an existing target table is kept as it is. Rows inserted into the parent are then routed to the matching partition.
 
 ## Columns
 

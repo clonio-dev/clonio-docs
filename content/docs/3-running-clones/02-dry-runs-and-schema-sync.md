@@ -13,6 +13,8 @@ clonio cloning:run production.cloning.yaml --target staging --dry-run
 
 Dry runs validate the YAML, test connections, estimate row counts, and show schema differences between source and target.
 
+Row counts on MySQL, MariaDB, PostgreSQL and SQL Server come from catalog statistics, so a dry run never scans a large production table. Estimated numbers are marked with `~`. See [Row estimates](../6-commands/10-cloning-run.md#row-estimates).
+
 ## Schema options
 
 Schema synchronization is controlled in `.cloning.yaml` and can be overridden per run.
