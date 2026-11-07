@@ -13,7 +13,12 @@
         ]
     },
     "scripts": {
-        "build": "vendor/bin/pergament generate-static public --content-path=content --base-url=\"https://clonio.dev\" --clean"
+        "build": "vendor/bin/pergament generate-static public --content-path=content --base-url=\"https://clonio.dev\" --clean",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "APP_URL=http://localhost:2566 vendor/bin/pergament generate-static public --content-path=content --base-url=\"http://localhost:2566\" --clean",
+            "php -S localhost:2566 -t public"
+        ]
     },
     "config": {
         "allow-plugins": {
