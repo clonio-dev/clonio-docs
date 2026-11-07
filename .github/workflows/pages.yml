@@ -37,6 +37,11 @@ jobs:
           APP_NAME: Clonio Docs
           APP_URL: https://clonio.dev
 
+      - name: Copy site media
+        run: |
+          mkdir -p public/media
+          cp assets/clonio-brag.mp4 assets/clonio-brag.jpg public/media/
+
       - name: Write CNAME for custom domain
         run: echo "clonio.dev" > public/CNAME
 

@@ -13,10 +13,14 @@
         ]
     },
     "scripts": {
-        "build": "vendor/bin/pergament generate-static public --content-path=content --base-url=\"https://clonio.dev\" --clean",
+        "build": [
+            "vendor/bin/pergament generate-static public --content-path=content --base-url=\"https://clonio.dev\" --clean",
+            "mkdir -p public/media && cp assets/clonio-brag.mp4 assets/clonio-brag.jpg public/media/"
+        ],
         "serve": [
             "Composer\\Config::disableProcessTimeout",
             "APP_URL=http://localhost:2566 vendor/bin/pergament generate-static public --content-path=content --base-url=\"http://localhost:2566\" --clean",
+            "mkdir -p public/media && cp assets/clonio-brag.mp4 assets/clonio-brag.jpg public/media/",
             "php -S localhost:2566 -t public"
         ]
     },
