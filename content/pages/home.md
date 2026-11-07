@@ -26,10 +26,10 @@ seo.description: "MIT-licensed CLI for safe, anonymized database cloning inside 
         </svg>
         <span class="clonio-brand-name">Clonio</span>
       </a>
-      <p class="clonio-eyebrow">MIT-licensed CLI - privacy-first database cloning</p>
-      <h1 id="clonio-hero-title">Test with real data. Without the GDPR nightmare.</h1>
-      <p class="clonio-lede">Clonio CLI clones production-like database data into development, test, staging, and CI while applying anonymization, schema sync, key remapping, and signed audit logs.</p>
-      <p class="clonio-lede clonio-lede-small">Run it from your terminal, Docker, Composer, or CI pipeline. No external cloud detour. No data leaves your infrastructure.</p>
+      <p class="clonio-eyebrow">Open-source CLI for anonymized database clones</p>
+      <h1 id="clonio-hero-title">Test with production-like data, not personal data.</h1>
+      <p class="clonio-lede">Clonio CLI copies production data into development, test, staging, and CI. On the way it anonymizes columns, syncs the schema, remaps keys, and writes a signed audit log.</p>
+      <p class="clonio-lede clonio-lede-small">Run it from your terminal, Docker, Composer, or CI pipeline. Clonio connects directly from your machine or CI runner to your databases, with no Clonio cloud service in between.</p>
       <div class="clonio-actions" aria-label="Primary actions">
         <a class="clonio-button clonio-button-primary" href="/docs/getting-started/introduction">Read the docs</a>
         <a class="clonio-button clonio-button-secondary" href="/docs/getting-started/installation">Install the CLI</a>
@@ -39,10 +39,11 @@ seo.description: "MIT-licensed CLI for safe, anonymized database cloning inside 
       <div class="clonio-terminal" aria-label="Terminal session">
         <div class="clonio-window-bar">
           <span class="clonio-dots" aria-hidden="true"><span></span><span></span><span></span></span>
-          <span class="clonio-window-title">Dark DevOps run</span>
+          <span class="clonio-window-title">~/app</span>
         </div>
         <pre><span class="clonio-prompt">$</span> clonio init
 <span class="clonio-prompt">$</span> clonio connection:add production --production
+<span class="clonio-prompt">$</span> clonio connection:add ci
 <span class="clonio-prompt">$</span> clonio cloning:dump --connection production
 <span class="clonio-prompt">$</span> clonio cloning:run production.cloning.yaml --target ci
 <span class="clonio-ok">✓ anonymization rules applied</span>
@@ -97,7 +98,7 @@ seo.description: "MIT-licensed CLI for safe, anonymized database cloning inside 
   <section class="clonio-section" aria-labelledby="clonio-problems-title">
     <p class="clonio-section-kicker">Problem solved</p>
     <h2 id="clonio-problems-title">Production-like data without production risk.</h2>
-    <p class="clonio-section-intro">Give developers and QA useful database states while keeping personally identifiable values, production identifiers, and run evidence under control.</p>
+    <p class="clonio-section-intro">Developers and QA get usable database states without seeing personal data or production IDs, and every run writes an audit log, even a failed one.</p>
     <div class="clonio-card-grid">
       <article class="clonio-card" data-index="01">
         <h3>Realistic data without exposing people</h3>
@@ -105,7 +106,7 @@ seo.description: "MIT-licensed CLI for safe, anonymized database cloning inside 
       </article>
       <article class="clonio-card" data-index="02">
         <h3>Repeatable .cloning.yaml runs</h3>
-        <p>Generate a cloning file, review it once, commit it, and rerun the same cloning path whenever a team needs fresh production-like data.</p>
+        <p>Generate a cloning file, review it once, commit it, and rerun the same clone whenever a team needs fresh production-like data.</p>
       </article>
       <article class="clonio-card" data-index="03">
         <h3>Audit evidence teams can keep</h3>
@@ -138,23 +139,23 @@ seo.description: "MIT-licensed CLI for safe, anonymized database cloning inside 
 
   <section class="clonio-section" aria-labelledby="clonio-capabilities-title">
     <p class="clonio-section-kicker">Core capabilities</p>
-    <h2 id="clonio-capabilities-title">Built for careful database movement.</h2>
+    <h2 id="clonio-capabilities-title">What a cloning run does to your data.</h2>
     <div class="clonio-card-grid clonio-capability-grid">
       <article class="clonio-card" data-index="A">
-        <h3>Privacy-first transformations</h3>
-        <p>Use fake, hash, mask, null, static, or keep per column, with PII matchers to help draft a configuration you can review.</p>
+        <h3>Per-column anonymization</h3>
+        <p>Use fake, hash, mask, null, static, exclude, or keep per column, with PII matchers to help draft a configuration you can review.</p>
       </article>
       <article class="clonio-card" data-index="B">
         <h3>Schema-aware transfers</h3>
-        <p>Create missing tables, add missing columns, and keep target environments aligned when production schema moves faster.</p>
+        <p>Create missing tables automatically. Optionally add missing columns or drop extra ones to keep targets aligned when the production schema moves faster.</p>
       </article>
       <article class="clonio-card" data-index="C">
         <h3>Key remapping</h3>
-        <p>Replace primary keys with new random values and rewrite foreign keys consistently across cloned records.</p>
+        <p>Replace primary keys with new random values and rewrite declared foreign keys consistently across cloned records.</p>
       </article>
       <article class="clonio-card" data-index="D">
-        <h3>DevOps-ready execution</h3>
-        <p>Run from a standalone binary, PHAR, Composer dev dependency, Docker image, local scripts, or CI jobs.</p>
+        <h3>Install it your way</h3>
+        <p>Install a standalone binary, PHAR, Composer dev dependency, or Docker image, then run it from local scripts, cron, or CI jobs.</p>
       </article>
     </div>
   </section>
@@ -162,11 +163,11 @@ seo.description: "MIT-licensed CLI for safe, anonymized database cloning inside 
   <section class="clonio-cta" aria-labelledby="clonio-oss-title">
     <div>
       <p class="clonio-section-kicker">Open source</p>
-      <h2 id="clonio-oss-title">MIT licensed. Unrestricted usage.</h2>
-      <p>Use Clonio CLI inside your own infrastructure, including commercial projects. Sponsorships and feature requests help keep development moving.</p>
+      <h2 id="clonio-oss-title">MIT licensed, free for commercial use.</h2>
+      <p>Use Clonio CLI inside your own infrastructure, including commercial projects. Sponsorships fund maintenance, new database drivers, better anonymization strategies, and documentation.</p>
     </div>
     <div class="clonio-cta-card">
-      <p>Support the project, request capabilities through the GitHub issue template, or inspect the source before adopting it in your workflow.</p>
+      <p>Read the source before you adopt it, or open a feature request through the GitHub issue template.</p>
       <div class="clonio-cta-links" aria-label="Open source links">
         <a class="clonio-button clonio-button-primary" href="https://github.com/sponsors/clonio-dev">Sponsor Clonio</a>
         <a class="clonio-button clonio-button-secondary" href="https://github.com/clonio-dev/clonio-cli/issues/new?template=feature_request.md">Request a feature</a>
