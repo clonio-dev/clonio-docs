@@ -7,7 +7,7 @@ seo.title: "Clonio CLI - GDPR-aware database cloning for developers"
 seo.description: "MIT-licensed CLI for safe, anonymized database cloning inside your own infrastructure."
 ---
 
-<main class="clonio-home">
+<div class="clonio-home">
   <section class="clonio-hero" aria-labelledby="clonio-hero-title">
     <div class="clonio-hero-copy">
       <a class="clonio-brand" href="/" aria-label="Clonio home">
@@ -24,154 +24,118 @@ seo.description: "MIT-licensed CLI for safe, anonymized database cloning inside 
             <ellipse cx="297" cy="260" fill="#1e3a8a" rx="18" ry="28" />
           </g>
         </svg>
-        <span class="clonio-brand-name">Clonio</span>
+        <span class="clonio-brand-name">clonio</span>
       </a>
-      <p class="clonio-eyebrow">MIT-licensed CLI - privacy-first database cloning</p>
-      <h1 id="clonio-hero-title">Test with real data. Without the GDPR nightmare.</h1>
-      <p class="clonio-lede">Clonio CLI clones production-like database data into development, test, staging, and CI while applying anonymization, schema sync, key remapping, and signed audit logs.</p>
-      <p class="clonio-lede clonio-lede-small">Run it from your terminal, Docker, Composer, or CI pipeline. No external cloud detour. No data leaves your infrastructure.</p>
-      <div class="clonio-actions" aria-label="Primary actions">
+      <p class="clonio-eyebrow">Open-source CLI for anonymized database clones</p>
+      <h1 id="clonio-hero-title">Test with <span class="clonio-nowrap">production-like</span> data, not personal data.</h1>
+      <p class="clonio-lede">Clonio CLI copies production data into development, test, staging, and CI. On the way it anonymizes columns, syncs the schema, remaps keys, and writes a signed audit log.</p>
+      <p class="clonio-lede clonio-lede-small">Run it from your terminal, Docker, Composer, or CI pipeline. Clonio connects directly from your machine or CI runner to your databases, with no Clonio cloud service in between.</p>
+      <div class="clonio-actions">
         <a class="clonio-button clonio-button-primary" href="/docs/getting-started/introduction">Read the docs</a>
         <a class="clonio-button clonio-button-secondary" href="/docs/getting-started/installation">Install the CLI</a>
       </div>
     </div>
-    <div class="clonio-hero-visual" aria-label="Clonio command line workflow visualization">
-      <div class="clonio-terminal" aria-label="Terminal session">
-        <div class="clonio-window-bar">
-          <span class="clonio-dots" aria-hidden="true"><span></span><span></span><span></span></span>
-          <span class="clonio-window-title">Dark DevOps run</span>
-        </div>
-        <pre><span class="clonio-prompt">$</span> clonio init
-<span class="clonio-prompt">$</span> clonio connection:add production --production
-<span class="clonio-prompt">$</span> clonio cloning:dump --connection production
-<span class="clonio-prompt">$</span> clonio cloning:run production.cloning.yaml --target ci
-<span class="clonio-ok">✓ anonymization rules applied</span>
-<span class="clonio-ok">✓ foreign keys remapped</span>
-<span class="clonio-ok">✓ audit artefact signed</span></pre>
-      </div>
-      <div class="clonio-pipeline" aria-hidden="true">
-        <svg viewBox="0 0 520 220" role="img">
-          <defs>
-            <linearGradient id="clonio-flow-gradient" x1="0" x2="1" y1="0" y2="0">
-              <stop offset="0" stop-color="#22d3ee" />
-              <stop offset="0.55" stop-color="#3b82f6" />
-              <stop offset="1" stop-color="#34d399" />
-            </linearGradient>
-            <filter id="clonio-glow" x="-30%" y="-30%" width="160%" height="160%">
-              <feGaussianBlur stdDeviation="4" result="blur" />
-              <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-            </filter>
-          </defs>
-          <path class="clonio-flow" filter="url(#clonio-glow)" d="M74 112 C146 34, 214 34, 270 112 S394 188, 452 90" />
-          <g>
-            <rect class="clonio-node" x="18" y="78" width="96" height="72" rx="18" />
-            <text class="clonio-node-label" x="45" y="105">source</text>
-            <text class="clonio-node-label" x="38" y="126">database</text>
-          </g>
-          <g>
-            <rect class="clonio-node" x="220" y="76" width="104" height="76" rx="18" />
-            <text class="clonio-node-label" x="238" y="105">anonymize</text>
-            <text class="clonio-node-label" x="252" y="126">remap</text>
-          </g>
-          <g>
-            <rect class="clonio-node" x="404" y="54" width="96" height="72" rx="18" />
-            <text class="clonio-node-label" x="434" y="84">CI</text>
-            <text class="clonio-node-label" x="422" y="105">target</text>
-          </g>
-        </svg>
-      </div>
-      <div class="clonio-audit-card" aria-label="Signed audit artefact visual">
-        <p class="clonio-audit-title">audit artefact <span class="clonio-signature">signed</span></p>
-        <div class="clonio-audit-lines" aria-hidden="true"><span></span><span></span><span></span></div>
-      </div>
-    </div>
+    <figure class="clonio-row" aria-labelledby="clonio-row-caption">
+      <figcaption id="clonio-row-caption" class="clonio-row-head">
+        <span class="clonio-row-table">customers</span>
+        <span class="clonio-row-legend"><span class="clonio-tag-src">production</span><span aria-hidden="true">→</span><span class="clonio-tag-dst">target</span></span>
+      </figcaption>
+      <table>
+        <thead>
+          <tr><th scope="col">column</th><th scope="col">production</th><th scope="col">target</th><th scope="col">strategy</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">id</th><td class="clonio-src">4812</td><td class="clonio-dst">731905</td><td class="clonio-strategy">remap</td></tr>
+          <tr><th scope="row">first_name</th><td class="clonio-src">Jana</td><td class="clonio-dst">Lukas</td><td class="clonio-strategy">fake</td></tr>
+          <tr><th scope="row">email</th><td class="clonio-src">jana.weber@gmx.de</td><td class="clonio-dst">marie42@example.org</td><td class="clonio-strategy">fake</td></tr>
+          <tr><th scope="row">phone</th><td class="clonio-src">+49 151 2345 6789</td><td class="clonio-dst">+49 *** **** ****</td><td class="clonio-strategy">mask</td></tr>
+          <tr><th scope="row">notes</th><td class="clonio-src">Prefers calls before noon</td><td class="clonio-dst clonio-null">NULL</td><td class="clonio-strategy">"null"</td></tr>
+          <tr class="clonio-row-keep"><th scope="row">created_at</th><td class="clonio-src">2023-04-11</td><td class="clonio-dst">2023-04-11</td><td class="clonio-strategy">keep</td></tr>
+        </tbody>
+      </table>
+      <p class="clonio-row-foot"><code>$ clonio cloning:run production.cloning.yaml --target ci</code><span class="clonio-row-signed">audit log signed</span></p>
+    </figure>
   </section>
 
-  <div class="clonio-signal-strip" aria-label="Clonio signals">
-    <span>MIT licensed</span>
-    <span>Runs in your infrastructure</span>
-    <span>Signed audit logs</span>
-    <span>Docker/Composer/CI ready</span>
-  </div>
+  <ul class="clonio-signals" aria-label="At a glance">
+    <li>MIT licensed</li>
+    <li>Runs in your infrastructure</li>
+    <li>Signed audit logs</li>
+    <li>Docker, Composer, CI</li>
+  </ul>
 
   <section class="clonio-section" aria-labelledby="clonio-problems-title">
-    <p class="clonio-section-kicker">Problem solved</p>
-    <h2 id="clonio-problems-title">Production-like data without production risk.</h2>
-    <p class="clonio-section-intro">Give developers and QA useful database states while keeping personally identifiable values, production identifiers, and run evidence under control.</p>
-    <div class="clonio-card-grid">
-      <article class="clonio-card" data-index="01">
+    <p class="clonio-kicker">Problem solved</p>
+    <h2 id="clonio-problems-title"><span class="clonio-nowrap">Production-like</span> data without production risk.</h2>
+    <p class="clonio-intro">Developers and QA get usable database states without seeing personal data or production IDs, and every run writes an audit log, even a failed one.</p>
+    <div class="clonio-columns">
+      <article>
         <h3>Realistic data without exposing people</h3>
         <p>Apply explicit transformations to names, emails, addresses, tokens, identifiers, and payment-related fields before records reach the target environment.</p>
       </article>
-      <article class="clonio-card" data-index="02">
+      <article>
         <h3>Repeatable .cloning.yaml runs</h3>
-        <p>Generate a cloning file, review it once, commit it, and rerun the same cloning path whenever a team needs fresh production-like data.</p>
+        <p>Generate a cloning file, review it once, commit it, and rerun the same clone whenever a team needs fresh production-like data.</p>
       </article>
-      <article class="clonio-card" data-index="03">
+      <article>
         <h3>Audit evidence teams can keep</h3>
         <p>Produce signed audit artefacts and structured process logs for local storage, S3-compatible storage, email, Slack, Microsoft Teams, or ntfy.</p>
       </article>
     </div>
   </section>
 
-  <section class="clonio-section" aria-labelledby="clonio-workflow-title">
-    <p class="clonio-section-kicker">CLI workflow</p>
-    <h2 id="clonio-workflow-title">Initialize, inspect, clone.</h2>
-    <div class="clonio-workflow">
-      <div class="clonio-workflow-note">
-        <strong>Connection names stay separate from secrets.</strong>
-        <p>The generated YAML controls row selection, schema synchronization, anonymization strategies, and key remapping. It is safe to commit because it references connection names, not credentials.</p>
-      </div>
-      <div class="clonio-command-panel" aria-label="First run command workflow">
-        <div class="clonio-window-bar">
-          <span class="clonio-dots" aria-hidden="true"><span></span><span></span><span></span></span>
-          <span class="clonio-window-title">first run</span>
-        </div>
-        <pre><span class="clonio-prompt">$</span> clonio init
+  <section class="clonio-section clonio-workflow" aria-labelledby="clonio-workflow-title">
+    <div class="clonio-workflow-copy">
+      <p class="clonio-kicker">CLI workflow</p>
+      <h2 id="clonio-workflow-title">Initialize, inspect, clone.</h2>
+      <p class="clonio-intro"><strong>Connection names stay separate from secrets.</strong> The generated YAML controls row selection, schema synchronization, anonymization strategies, and key remapping. It is safe to commit because it references connection names, not credentials.</p>
+    </div>
+    <div class="clonio-terminal" aria-label="First run command workflow">
+      <div class="clonio-terminal-bar"><span class="clonio-dots" aria-hidden="true"><span></span><span></span><span></span></span><span>first run</span></div>
+<pre><span class="clonio-prompt">$</span> clonio init
 <span class="clonio-prompt">$</span> clonio connection:add production --production
 <span class="clonio-prompt">$</span> clonio connection:add local-dev
 <span class="clonio-prompt">$</span> clonio cloning:dump --connection production
 <span class="clonio-prompt">$</span> clonio cloning:run production.cloning.yaml --target local-dev</pre>
-      </div>
     </div>
   </section>
 
   <section class="clonio-section" aria-labelledby="clonio-capabilities-title">
-    <p class="clonio-section-kicker">Core capabilities</p>
-    <h2 id="clonio-capabilities-title">Built for careful database movement.</h2>
-    <div class="clonio-card-grid clonio-capability-grid">
-      <article class="clonio-card" data-index="A">
-        <h3>Privacy-first transformations</h3>
-        <p>Use fake, hash, mask, null, static, or keep per column, with PII matchers to help draft a configuration you can review.</p>
+    <p class="clonio-kicker">Core capabilities</p>
+    <h2 id="clonio-capabilities-title">What a cloning run does to your data.</h2>
+    <div class="clonio-grid">
+      <article>
+        <h3>Per-column anonymization</h3>
+        <p>Use fake, hash, mask, null, static, exclude, or keep per column, with PII matchers to help draft a configuration you can review.</p>
       </article>
-      <article class="clonio-card" data-index="B">
+      <article>
         <h3>Schema-aware transfers</h3>
-        <p>Create missing tables, add missing columns, and keep target environments aligned when production schema moves faster.</p>
+        <p>Create missing tables automatically. Optionally add missing columns or drop extra ones to keep targets aligned when the production schema moves faster.</p>
       </article>
-      <article class="clonio-card" data-index="C">
+      <article>
         <h3>Key remapping</h3>
-        <p>Replace primary keys with new random values and rewrite foreign keys consistently across cloned records.</p>
+        <p>Replace primary keys with new random values and rewrite declared foreign keys consistently across cloned records.</p>
       </article>
-      <article class="clonio-card" data-index="D">
-        <h3>DevOps-ready execution</h3>
-        <p>Run from a standalone binary, PHAR, Composer dev dependency, Docker image, local scripts, or CI jobs.</p>
+      <article>
+        <h3>Install it your way</h3>
+        <p>Install a standalone binary, PHAR, Composer dev dependency, or Docker image, then run it from local scripts, cron, or CI jobs.</p>
       </article>
     </div>
   </section>
 
   <section class="clonio-cta" aria-labelledby="clonio-oss-title">
     <div>
-      <p class="clonio-section-kicker">Open source</p>
-      <h2 id="clonio-oss-title">MIT licensed. Unrestricted usage.</h2>
-      <p>Use Clonio CLI inside your own infrastructure, including commercial projects. Sponsorships and feature requests help keep development moving.</p>
+      <p class="clonio-kicker">Open source</p>
+      <h2 id="clonio-oss-title">MIT licensed, free for commercial use.</h2>
+      <p>Use Clonio CLI inside your own infrastructure, including commercial projects. Sponsorships fund maintenance, new database drivers, better anonymization strategies, and documentation.</p>
     </div>
-    <div class="clonio-cta-card">
-      <p>Support the project, request capabilities through the GitHub issue template, or inspect the source before adopting it in your workflow.</p>
-      <div class="clonio-cta-links" aria-label="Open source links">
+    <div class="clonio-cta-side">
+      <p>Read the source before you adopt it, or open a feature request through the GitHub issue template.</p>
+      <div class="clonio-actions">
         <a class="clonio-button clonio-button-primary" href="https://github.com/sponsors/clonio-dev">Sponsor Clonio</a>
         <a class="clonio-button clonio-button-secondary" href="https://github.com/clonio-dev/clonio-cli/issues/new?template=feature_request.md">Request a feature</a>
         <a class="clonio-button clonio-button-secondary" href="https://github.com/clonio-dev/clonio-cli">View source</a>
       </div>
     </div>
   </section>
-</main>
+</div>
