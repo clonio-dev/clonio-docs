@@ -64,6 +64,18 @@ seo.description: "MIT-licensed CLI for safe, anonymized database cloning inside 
     <li>Docker, Composer, CI</li>
   </ul>
 
+  <section class="clonio-section clonio-watch" id="video" aria-labelledby="clonio-watch-title">
+    <div class="clonio-watch-copy">
+      <p class="clonio-kicker">In 20 seconds</p>
+      <h2 id="clonio-watch-title">Watch one record get cloned.</h2>
+      <p class="clonio-intro">Jana's row leaves production, every column runs through its strategy, and the target gets realistic data with no trace of her. The run ends with a signed audit log.</p>
+    </div>
+    <video class="clonio-video" controls preload="none" playsinline width="1920" height="1080" poster="/media/clonio-brag.jpg">
+      <source src="/media/clonio-brag.mp4" type="video/mp4">
+      <a href="/media/clonio-brag.mp4">Download the 20-second video</a>
+    </video>
+  </section>
+
   <section class="clonio-section" aria-labelledby="clonio-problems-title">
     <p class="clonio-kicker">Problem solved</p>
     <h2 id="clonio-problems-title"><span class="clonio-nowrap">Production-like</span> data without production risk.</h2>
